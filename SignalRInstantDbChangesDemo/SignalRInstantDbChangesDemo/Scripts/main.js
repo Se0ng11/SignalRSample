@@ -106,12 +106,13 @@ function IntervalColor() {
 
         $table.find('thead tr th.darkblue:nth(0)').removeClass('darkblue');
         $table.find('thead tr th:contains("' + $hHour + '")').addClass('darkblue');
+        $table.find('tbody tr td:nth-child(n+' + ($pHour - 1) + ')').removeClass('temp-black');
         $table.find('tbody tr td:nth-child(n+' + $pHour + ')').addClass('temp-black');
 
 
         if ($mHour > 23) {
             var calNew = ($mHour - 23) + 2;
-            $table.find('tbody tr td:nth-child(-n+' + calNew + ')').removeClass().addClass('temp-black');
+            $table.find('tbody tr td:nth-child(-n+' + calNew + '):nth-child(n+'+ (calNew - 1) +')').removeClass().addClass('temp-black');
         }
     }
 
