@@ -1,52 +1,35 @@
-﻿body {
-    /*padding-top: 50px;*/
-    /*padding-bottom: 20px;*/
-}
-
+﻿
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 table {
-    /*user-select:none;*/   
+    /*user-select:none;*/  
+    width: 100%; 
 }
 
-table tbody tr td {
-    line-height: 0.65;
+table thead tr th {
+    border: 1px solid lightgrey;
+}
+
+table tbody tr td{
+    line-height: 0.97;
+    border: 1px solid lightgrey;
+    width: 30px;
+    padding:0;
 }
 
 table thead tr th,
 table tbody tr td:nth-child(-n+2){
     background: #f5f5f5;
-    font-weight:bold;
-    width: 10px;
-    padding:0;
-    margin:0;
     text-align:center;
+    font-weight: bold;
 }
 
 table tbody tr td:nth-child(n+3){
     text-align: center;
-    font-weight: bold;
-    width: 10px;
-    padding:0;
-    margin:0;
 }
 
 table tbody tr.underline {
@@ -57,13 +40,29 @@ table tbody tr td.rightline {
     border-right:5px solid aqua;
 }
 
+.footer {
+    width: 100%;
+    background: #f5f5f5; 
+    border: 1px solid #fff;
+}
+
+.footer div {
+    border: 1px solid #fff;
+    display: inline;
+}
+
+.footer .right {
+    float: right;
+}
 
 .green {
     background: green;
+    color: #fff;
 }
 
 .red {
     background: red;
+    color: #fff;
 }
 
 .yellow {
@@ -79,6 +78,15 @@ table tbody tr td.rightline {
 }
 
 .black {
-    background: black;
-    color: white;
+    background: #000;
+    color: #fff;
+}
+
+.temp-black {
+    background: #000;
+}
+
+.darkblue {
+    background: blue;
+    color: #fff;
 }
