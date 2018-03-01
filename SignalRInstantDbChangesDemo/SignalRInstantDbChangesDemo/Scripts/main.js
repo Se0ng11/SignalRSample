@@ -3,9 +3,11 @@
 $(function () {
 
     isBlink = false;
+    EnabledKeyPressEvent();
     GenerateTimeAndLine();
     var notifications = $.connection.dataResultHub;
     notifications.client.updateDataResultInformation = function (serverResponse) {
+        console.log(serverResponse);
         setTimeout(function () {
             getDataResultInformation();
         }, 200);
@@ -39,6 +41,20 @@ function getDataResultInformation() {
     });
 }
 
+function GetServerTime() {
+    $.ajax({
+        url: location.href + '/home/GetServerTime',
+        contentType: 'application/html ; charset:utf-8',
+        type: 'GET',
+        dataType: 'JSON'
+    }).success(function (result) {
+        LiveDateTime(result);
+    }).error(function (error) {
+        alert(error);
+    });
+
+}
+
 function GenerateTimeAndLine() {
     $('#divLine').empty();
     var time = 24;
@@ -65,19 +81,19 @@ function GenerateTimeAndLine() {
 
                 if (z === 6 || z === 14 || z === 22) {
                     var b = "";
-                    aR += "<td class=\"green rightline\" id=\"" + uI + "\"></td>";
+                    aR += "<td class=\"dormant rightline\" id=\"" + uI + "\"></td>";
                 }
                 else {
-                    aR += "<td class=\"green\"  id=\"" + uI + "\"></td>";
+                    aR += "<td class=\"dormant\"  id=\"" + uI + "\"></td>";
                 }
 
             }
 
             if (k === (line - 1)) {
-                row += "<tr class=\"underline\"><td>" + p + "</td><td>" + l + "</td>" + aR + "</tr>";
+                row += "<tr class=\"underline\"><td class=\"main-label\">" + p + "</td><td class=\"main-label\">" + l + "</td>" + aR + "</tr>";
             }
             else {
-                row += "<tr><td>" + p + "</td><td>" + l + "</td>" + aR + "</tr>";
+                row += "<tr><td class=\"main-label\">" + p + "</td><td class=\"main-label\">" + l + "</td>" + aR + "</tr>";
             }
 
             c += 1;
@@ -88,43 +104,69 @@ function GenerateTimeAndLine() {
 
     $('#divLine').append(table);
     IntervalColor();
-    LiveDateTime();
+    GetServerTime();
 }
 
 function GenerateFooter() {
-    var footer = "<div class=\"footer\"><div>Hartalega NGC Sdn Bhd</div><div class=\"right\">Current time: <span class=\"current-time\"></span></div></div>";
+    var footer = "<div class=\"footer\">" +
+    "<div>Hartalega NGC Sdn Bhd</div>" +
+    "<div>Current time: <span class=\"current-time\"></span></div>" +
+    "<div class=\"right\">Version: 0.1</div>" +
+    "</div>";
     return footer; 
 }
 
 function IntervalColor() {
     function SetIntervalColor() {
+        var $time = $('#time');
         var $table = $('table');
         var $hour = moment().hour();
-        var $hHour = ("0" + $hour).slice(-2);
-        var $pHour = $hour + 2;
-        var $mHour = $hour + 8;
-
-        $table.find('thead tr th.darkblue:nth(0)').removeClass('darkblue');
-        $table.find('thead tr th:contains("' + $hHour + '")').addClass('darkblue');
-        $table.find('tbody tr td:nth-child(n+' + ($pHour - 1) + ')').removeClass('temp-black');
-        $table.find('tbody tr td:nth-child(n+' + $pHour + ')').addClass('temp-black');
-
-        if ($mHour > 23) {
-            var calNew = ($mHour - 23) + 2;
-            $table.find('tbody tr td:nth-child(-n+' + calNew + '):nth-child(n+' + (calNew - 1) + ')').removeClass().addClass('temp-black').html("");
+        if ($time.val().trim() !== "") {
+            $hour = parseInt($time.val());
         }
+
+        var $targetHour = ("0" + $hour).slice(-2);
+        //var $startHour = $hour + 2;
+        //var $endHour = $hour + 8;
+
+        //paint current hour
+        $table.find('thead tr th.darkblue:nth(0)').removeClass('darkblue');
+        $table.find('thead tr th:contains("' + $targetHour + '")').addClass('darkblue');
+
+        //$table.find('tbody tr td:not(".main-label")').removeClass('dormant').not('.new').addClass('green');
+        //$table.find('tbody tr td:not(".main-label"):nth-child(n+' + ($startHour - 1) + ')').removeClass('dormant').not('.new').addClass('green');
+        //var $dormantDayHour = $table.find('tbody tr td:not(".main-label"):nth-child(n+' + $startHour + '):nth-child(-n+ ' + ($endHour + 3) + ')');
+
+        //SimpleRendering($dormantDayHour);
+
+        //if ($endHour > 23) {
+        //    var endNightHour = ($endHour - 23) + 2;
+        //    var $dormantNightHour = $table.find('tbody tr td:not(".main-label"):nth-child(n+3):nth-child(-n+ ' + endNightHour + ')');
+
+        //    SimpleRendering($dormantNightHour);
+        //}
+
+        //if ($hour === 0) {
+        //    $table.find('tbody tr td:nth-child(n+26)').removeClass('dormant').not('.new').addClass('dormant');
+        //}
     }
 
-    SetIntervalColor();
+    function SimpleRendering(element) {
+        //element.not('.new').not('.rightline').removeClass();
+        //element.not('.new').addClass('dormant');
+    }
+
+    SetIntervalColor(true);
 
     setInterval(function () {
-        SetIntervalColor();
-    }, 10000);
+        SetIntervalColor(false);
+    }, 5000);
 }
 
-function LiveDateTime() {
+function LiveDateTime(serverDate) {
     function SetLiveDateTime() {
-        $(document).find('.current-time').html(moment().format("YYYY/MM/DD HH:mm:ss"));
+        serverDate = moment(serverDate).add('1', 'seconds').format("YYYY/MM/DD hh:mm:ss");
+        $(document).find('.current-time').html(serverDate);
     }
 
     SetLiveDateTime();
@@ -146,7 +188,12 @@ function GenerateBlinkAndColor(result) {
         }
         else {
             if ($pC !== $nC) {
-                $td.removeClass($pC).addClass($nC);
+                if ($td.hasClass('rightline')) {
+                    $td.removeClass($pC).addClass($nC + " new rightline");
+                }
+                else {
+                    $td.removeClass($pC).addClass($nC + " new");
+                }
             }
         }
 
@@ -154,15 +201,44 @@ function GenerateBlinkAndColor(result) {
     });
 }
 
-function PutHereToBlink(element, prevColor, newColor) {
+function PutHereToBlink(element, prevClass, newClass) {
     var count = 0;
+
     var blink = setInterval(function () {
-        element.toggleClass("" + prevColor + "" + " " + newColor + "");
+        if (element.hasClass('rightline')) {
+            element.toggleClass("" + prevClass + "" + " " + newClass + " new rightline");
+        } else {
+            element.toggleClass("" + prevClass + "" + " " + newClass + " new");
+        }
+
+        //element.fadeIn(300).fadeOut(500);
+
         count += 1;
         if (count === 10) {
-            element.removeClass(prevColor).addClass(newColor);
+
+            if (element.hasClass('rightline')){
+                element.removeClass(prevClass).addClass(newClass + " new rightline");
+            }
+            else {
+                element.removeClass(prevClass).addClass(newClass + " new");
+            }
+
             window.clearInterval(blink);
         }
     }, 800);
+
 }
 
+function EnabledKeyPressEvent(){
+    var $modal = $('#modal-test');
+    $(document).keypress(function (e) {
+        if (e.key == "e") {
+            $modal.modal('show');
+        }
+        else if (e.key === "c")
+        {
+            $modal.modal('hide');
+        }
+    
+    });
+}
