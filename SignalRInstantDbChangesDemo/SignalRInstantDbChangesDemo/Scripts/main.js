@@ -13,7 +13,7 @@ $(function () {
 
     $.connection.hub.start().done(function () {
         GetInformation();
-        GenerateFooter();
+        //GenerateFooter();
     }).fail(function (error) {
         alert(error);
     });
@@ -29,10 +29,17 @@ function GetInformation() {
         var pResult = JSON.parse(result);
 
         if (pResult.length === 0) {
-            GenerateTimeAndLine();
+            //GenerateTimeAndLine();
         }
         else {
-            GenerateTimeAndLine(pResult.x);
+            //MassageData(pResult);
+
+            if (!isBlink) {
+                GenerateTimeAndLine(pResult.x);
+            } else {
+                //do blink logic
+            }
+
             //GenerateNumber(pResult.y);
         }
     }).error(function (error) {
@@ -60,20 +67,30 @@ function GenerateTimeAndLine(data) {
     //var plant = 4;
     //var line = 12;
     var th = table = td = row = "";
-    var c = 0;
+    //var c = 0;
     var pad = "00";
 
-
-    function Painting(td, color, value) {
+    var partId = "";
+    function Painting(td, color, value, keys) {
         if (j > 1) {
+            var refineId = partId + keys.substr(keys.length - 2);
+
             if (j === 8 || j === 16 || j === 24) {
-                td = "<td class=\""+ color + " rightline\">"+ value +"</td>";
+                td = "<td id=\"" + refineId +"\" class=\""+ color + " rightline\">"+ value +"</td>";
             }
             else {
-                td = "<td class=\"" + color + "\">" + value + "</td>";
+                td = "<td id=\"" + refineId +"\" class=\"" + color + "\">" + value + "</td>";
             }
+            if (refineId.length >=8){
+                partId = "";
+            }
+            
         } else {
-            td = "<td>" + value + "</td>";
+            if (partId.length >= 5) {
+                partId = "";
+            }
+            td = "<td id=\"\">" + value + "</td>";
+            partId += value;
         }
         return td;
     }
@@ -87,17 +104,17 @@ function GenerateTimeAndLine(data) {
             var $value = temp["" + keys[j] + ""];
 
             if ($value === "1") {
-                td+= Painting(td, "green", "");
+                td += Painting(td, "green", "", keys[j]);
             }else if ($value === "0") {
-                td+= Painting(td, "dormant", "");
+                td += Painting(td, "dormant", "", keys[j]);
             } else if ($value === "6") {
-                td+= Painting(td, "lightblue", "");
+                td += Painting(td, "lightblue", "", keys[j]);
             } else if ($value === "3") {
-                td+= Painting(td, "yellow", "");
+                td += Painting(td, "yellow", "", keys[j]);
             } else if ($value === "7") {
-                td+= Painting(td, "red", "");
+                td += Painting(td, "red", "", keys[j]);
             } else {
-                td += Painting(td, "black", $value);
+                td += Painting(td, "black", $value, keys[j]);
             }
         }
 
@@ -148,7 +165,7 @@ function GenerateTimeAndLine(data) {
 
     $('#divLine').append(table);
     IntervalColor();
-    GetServerTime();
+    //GetServerTime();
 }
 
 function GenerateFooter() {
@@ -163,42 +180,11 @@ function GenerateFooter() {
 
 function IntervalColor() {
     function SetIntervalColor() {
-        //var $time = $('#time');
         var $table = $('table');
         var $hour = moment().hour();
-        //if ($time.val().trim() !== "") {
-        //    $hour = parseInt($time.val());
-        //}
-
         var $targetHour = ("0" + $hour).slice(-2);
-        //var $startHour = $hour + 2;
-        //var $endHour = $hour + 8;
-
-        //paint current hour
         $table.find('thead tr th.darkblue:nth(0)').removeClass('darkblue');
         $table.find('thead tr th:contains("' + $targetHour + '")').addClass('darkblue');
-
-        //$table.find('tbody tr td:not(".main-label")').removeClass('dormant').not('.new').addClass('green');
-        //$table.find('tbody tr td:not(".main-label"):nth-child(n+' + ($startHour - 1) + ')').removeClass('dormant').not('.new').addClass('green');
-        //var $dormantDayHour = $table.find('tbody tr td:not(".main-label"):nth-child(n+' + $startHour + '):nth-child(-n+ ' + ($endHour + 3) + ')');
-
-        //SimpleRendering($dormantDayHour);
-
-        //if ($endHour > 23) {
-        //    var endNightHour = ($endHour - 23) + 2;
-        //    var $dormantNightHour = $table.find('tbody tr td:not(".main-label"):nth-child(n+3):nth-child(-n+ ' + endNightHour + ')');
-
-        //    SimpleRendering($dormantNightHour);
-        //}
-
-        //if ($hour === 0) {
-        //    $table.find('tbody tr td:nth-child(n+26)').removeClass('dormant').not('.new').addClass('dormant');
-        //}
-    }
-
-    function SimpleRendering(element) {
-        //element.not('.new').not('.rightline').removeClass();
-        //element.not('.new').addClass('dormant');
     }
 
     SetIntervalColor(true);
@@ -256,8 +242,6 @@ function PutHereToBlink(element, prevClass, newClass) {
             element.toggleClass("" + prevClass + "" + " " + newClass + " new");
         }
 
-        //element.fadeIn(300).fadeOut(500);
-
         count += 1;
         if (count === 10) {
 
@@ -272,4 +256,28 @@ function PutHereToBlink(element, prevClass, newClass) {
         }
     }, 800);
 
+}
+
+function MassageData(data) {
+    var x = data.x;
+    var y = data.y;
+    var nArray = [];
+
+    for (var i = 0; i <= x.length - 1; i++) {
+        var key = Object.keys(x[i]);
+        var combine = x[i].Plant + x[i].Line;
+
+        for (var j = 0; j <= key.length - 1; j++) {
+            var id = "";
+            var value = "";
+
+            if (key[j].substring(0, 1) === "H") {
+                id = combine + key[j];//.slice(1);
+                value = x[i][key[j]];
+                nArray.push({ id, value });
+            }
+        }
+    }
+
+    return nArray;
 }

@@ -1,18 +1,23 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
+using SignalRInstantDbChangesDemo.DataAccess;
+using SignalRInstantDbChangesDemo.Models;
+using System.Collections.Generic;
 
 namespace SignalRInstantDbChangesDemo.Hubs
 {
     public class MonitoringReportHub : Hub
     {
-        [HubMethodName("sendMonitoringReport")]
-        public static void SendMonitoringReport(string action)
+        public void SendMonitoringReport(string messages)
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<MonitoringReportHub>();
-
-            context.Clients.All.updateMonitoringReport(action);
-
+            Clients.All.updateMonitoringReport(messages);
+        }
+        public MonitoringReportHub()
+        {
+            void dispatcher(string messages)
+            { SendMonitoringReport(messages); }
+            MonitoringReportRepository.GetInstance(dispatcher);
         }
 
     }
+
 }

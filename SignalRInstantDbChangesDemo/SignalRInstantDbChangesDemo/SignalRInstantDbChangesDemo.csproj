@@ -21,6 +21,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -198,6 +200,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DataAccess\PercentageDataRepository.cs" />
     <Compile Include="DataAccess\MonitoringReportRepository.cs" />
+    <Compile Include="DataAccess\NewMessageNotifier.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -246,6 +249,10 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Sql\dataresult.sql" />
     <Content Include="Sql\signalRtesting.sql" />
+    <Content Include="Sql\TV_QAIMonitoringReport.sql" />
+    <Content Include="Sql\TV_QAIMonitoringReport\20180202.txt" />
+    <Content Include="Sql\TV_QAIPercentageData.sql" />
+    <Content Include="Sql\TV_QAIPercentageData\20180202.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

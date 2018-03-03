@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
+using SignalRInstantDbChangesDemo.DataAccess;
 
 namespace SignalRInstantDbChangesDemo.Hubs
 {
     public class PercentageDataHub : Hub
     {
-        [HubMethodName("sendPercentageData")]
-        public static void SendPercentageData(string action)
-        {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<PercentageDataHub>();
-
-            context.Clients.All.updatePercentageData(action);
-
-        }
+        //public void SendMonitoringReport(string messages)
+        //{
+        //    Clients.All.updateMonitoringReport(messages);
+        //}
+        //public PercentageDataHub()
+        //{
+        //    void dispatcher(string messages)
+        //    { SendMonitoringReport(messages); }
+        //    PercentageDataRepository.GetInstance(dispatcher);
+        //}
     }
 }
