@@ -1,7 +1,9 @@
-﻿using SignalRInstantDbChangesDemo.Models;
+﻿using Newtonsoft.Json;
+using SignalRInstantDbChangesDemo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,25 +16,30 @@ namespace SignalRInstantDbChangesDemo.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ContentResult SendDetailsReport()
         {
-            ViewBag.Message = "Your application description page.";
+            IQaiService dataResultService = new QaiService();
+            var data1 = dataResultService.GetMonitoringReportDetails();
+            var data2 = dataResultService.GetPercentageDataDetails();
 
-            return View();
+            var result = new { x = data1, y = data2 };
+
+            return Content(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json"); 
         }
 
-        public ActionResult Contact()
+        public ContentResult SendPercentageData()
         {
-            ViewBag.Message = "Your contact page.";
+            IQaiService dataResultService = new QaiService();
 
-            return View();
+            var obj = dataResultService.GetPercentageDataDetails();
+
+            return Content(JsonConvert.SerializeObject(obj, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json"); 
         }
 
-
-        public JsonResult SendPQINotification()
+        public JsonResult GetServerTime()
         {
-            IDateResultService dataResultService = new DataResultService();
-            return Json(dataResultService.GetDataResultDetails(), JsonRequestBehavior.AllowGet);
+            return Json(DateTime.Now, JsonRequestBehavior.AllowGet);
         }
+
     }
 }
