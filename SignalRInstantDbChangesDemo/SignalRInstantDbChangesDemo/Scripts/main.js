@@ -3,17 +3,18 @@
 $(function () {
 
     isBlink = false;
-    //GenerateTimeAndLine();
     var notifcation = $.connection.monitoringReportHub;
 
     notifcation.client.updateMonitoringReport = function (serverResponse) {
-        GetInformation();
+        setTimeout(function () {
+            GetInformation();
+        }, 200);
+
         isBlink = true;
     };
 
     $.connection.hub.start().done(function () {
         GetInformation();
-        //GenerateFooter();
     }).fail(function (error) {
         alert(error);
     });
@@ -27,47 +28,26 @@ function GetInformation() {
         dataType: 'html'
     }).success(function (result) {
         var pResult = JSON.parse(result);
-
+        LiveDateTime(result.serverDate);
         if (pResult.length === 0) {
-            //GenerateTimeAndLine();
         }
-        else {
-            //MassageData(pResult);
-
+        else
+        {
             if (!isBlink) {
-                GenerateTimeAndLine(pResult.x);
+                GenerateTimeAndLine(pResult);
             } else {
-                //do blink logic
+                MassageData(pResult);
             }
-
-            //GenerateNumber(pResult.y);
         }
     }).error(function (error) {
         alert(error);
     });
-}
-
-function GetServerTime() {
-    $.ajax({
-        url: location.href + '/home/GetServerTime',
-        contentType: 'application/html ; charset:utf-8',
-        type: 'GET',
-        dataType: 'JSON'
-    }).success(function (result) {
-        LiveDateTime(result);
-    }).error(function (error) {
-        alert(error);
-    });
-
 }
 
 function GenerateTimeAndLine(data) {
     $('#divLine').empty();
     var time = 24;
-    //var plant = 4;
-    //var line = 12;
     var th = table = td = row = "";
-    //var c = 0;
     var pad = "00";
 
     var partId = "";
@@ -84,7 +64,6 @@ function GenerateTimeAndLine(data) {
             if (refineId.length >=8){
                 partId = "";
             }
-            
         } else {
             if (partId.length >= 5) {
                 partId = "";
@@ -95,30 +74,44 @@ function GenerateTimeAndLine(data) {
         return td;
     }
 
-    var isDiff = false;
-    for (var i = 0; i <= data.length - 1; i++) {
-        var temp = data[i];
+    var first = data.x;
+    var second = data.y;
+    var previous = "";
+    for (var i = 0; i <= first.length - 1; i++) {
+        var temp = first[i];
         var keys = Object.keys(temp);
 
         for (var j = 0; j <= keys.length - 1; j++) {
             var $value = temp["" + keys[j] + ""];
+            var pValue = second[i]["" + keys[j] + ""] || "";
+            var percentage = (pValue === 0 ? "" : pValue);
 
             if ($value === "1") {
-                td += Painting(td, "green", "", keys[j]);
+                td += Painting(td, "green", percentage, keys[j]);
             }else if ($value === "0") {
-                td += Painting(td, "dormant", "", keys[j]);
+                td += Painting(td, "dormant", percentage, keys[j]);
             } else if ($value === "6") {
-                td += Painting(td, "lightblue", "", keys[j]);
+                td += Painting(td, "lightblue", percentage, keys[j]);
             } else if ($value === "3") {
-                td += Painting(td, "yellow", "", keys[j]);
+                td += Painting(td, "yellow", percentage, keys[j]);
             } else if ($value === "7") {
-                td += Painting(td, "red", "", keys[j]);
+                td += Painting(td, "red", percentage, keys[j]);
             } else {
                 td += Painting(td, "black", $value, keys[j]);
             }
         }
 
-        row += "<tr>" + td + "</tr>";
+        if (previous === "") {
+            previous = first[i].Plant;
+        }
+
+        if (first[i].Plant !== previous) {
+            row += "<tr class=\"upperline\">" + td + "</tr>";
+            previous = first[i].Plant;
+        }
+        else {
+            row += "<tr>" + td + "</tr>";
+        }
 
         td = "";
     }
@@ -127,45 +120,10 @@ function GenerateTimeAndLine(data) {
         th += "<th>" + ('0' + i).slice(-2) + "</th>";
     }
 
-    table = "<table class=\"\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>"; // + GenerateFooter();
-
-    //for (var j = 0; j < plant; j++) {
-    //    var p = ('P' + (j + 1)).slice(-2);
-
-    //    for (var k = 0; k < line; k++) {
-    //        var l = "L" + (pad + (c + 1)).slice(-pad.length);
-    //        var aR = "";
-
-    //        for (var z = 0; z < time; z++) {
-    //            var x = ('0' + z).slice(-2);
-    //            var uI = (p + l + x);
-
-    //            if (z === 6 || z === 14 || z === 22) {
-    //                var b = "";
-    //                aR += "<td class=\"dormant rightline\" id=\"" + uI + "\"></td>";
-    //            }
-    //            else {
-    //                aR += "<td class=\"dormant\"  id=\"" + uI + "\"></td>";
-    //            }
-
-    //        }
-
-    //        if (k === (line - 1)) {
-    //            row += "<tr class=\"underline\"><td class=\"main-label\">" + p + "</td><td class=\"main-label\">" + l + "</td>" + aR + "</tr>";
-    //        }
-    //        else {
-    //            row += "<tr><td class=\"main-label\">" + p + "</td><td class=\"main-label\">" + l + "</td>" + aR + "</tr>";
-    //        }
-
-    //        c += 1;
-    //    }
-    //}
-
-    //table = "<table class=\"\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>" + GenerateFooter();
+    table = "<table class=\"\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>";
 
     $('#divLine').append(table);
     IntervalColor();
-    //GetServerTime();
 }
 
 function GenerateFooter() {
@@ -209,9 +167,9 @@ function LiveDateTime(serverDate) {
 function GenerateBlinkAndColor(result) {
     var $table = $('table');
     $(result).each(function (i, x) {
-        var $td = $table.find('tbody tr td[id="' + x.Id + '"]');
+        var $td = $table.find('tbody tr td[id="' + x.id + '"]');
         var $pC = $td.attr('class');
-        var $nC = x.Status;
+        var $nC = x.status;
         if (isBlink) {
             if ($pC !== $nC) {
                 PutHereToBlink($td, $pC, $nC);
@@ -220,15 +178,12 @@ function GenerateBlinkAndColor(result) {
         else {
             if ($pC !== $nC) {
                 if ($td.hasClass('rightline')) {
-                    $td.removeClass($pC).addClass($nC + " new rightline");
-                }
-                else {
-                    $td.removeClass($pC).addClass($nC + " new");
+                    $td.removeClass($pC).addClass($nC + " rightline");
                 }
             }
         }
 
-        $td.text(x.Message);
+        $td.text(x.message);
     });
 }
 
@@ -237,19 +192,19 @@ function PutHereToBlink(element, prevClass, newClass) {
 
     var blink = setInterval(function () {
         if (element.hasClass('rightline')) {
-            element.toggleClass("" + prevClass + "" + " " + newClass + " new rightline");
+            element.toggleClass("" + prevClass + "" + " " + newClass + " rightline");
         } else {
-            element.toggleClass("" + prevClass + "" + " " + newClass + " new");
+            element.toggleClass("" + prevClass + "" + " " + newClass);
         }
 
         count += 1;
         if (count === 10) {
 
             if (element.hasClass('rightline')){
-                element.removeClass(prevClass).addClass(newClass + " new rightline");
+                element.removeClass(prevClass).addClass(newClass + " rightline");
             }
             else {
-                element.removeClass(prevClass).addClass(newClass + " new");
+                element.removeClass(prevClass).addClass(newClass);
             }
 
             window.clearInterval(blink);
@@ -269,15 +224,46 @@ function MassageData(data) {
 
         for (var j = 0; j <= key.length - 1; j++) {
             var id = "";
-            var value = "";
-
+            var status = "";
+            var message = "";
             if (key[j].substring(0, 1) === "H") {
-                id = combine + key[j];//.slice(1);
-                value = x[i][key[j]];
-                nArray.push({ id, value });
+                id = combine + key[j].slice(1);
+                status = ConvertNumberToColor(x[i][key[j]]);
+                message = (y[i][key[j]] != 0) ? y[i][key[j]] : HideNumber(x[i][key[j]]);
+                nArray.push({ id, status, message });
             }
         }
     }
 
-    return nArray;
+    GenerateBlinkAndColor(nArray);
+}
+
+function ConvertNumberToColor(value) {
+    var color = "";
+    if (value === "1") {
+        color = "green";
+    } else if (value === "0") {
+        color = "dormant";
+    } else if (value === "6") {
+        color = "lightblue";
+    } else if (value === "3") {
+        color = "yellow";
+    } else if (value === "7") {
+        color = "red";
+    } else {
+        color = "black";
+    }
+
+    return color;
+
+}
+
+function HideNumber(value) {
+    var number = "";
+    if (value === "1" || value === "0" || value === "6" || value === "3" || value === "7") {
+        number = "";
+    } else {
+        number = value;
+    }
+    return number;
 }

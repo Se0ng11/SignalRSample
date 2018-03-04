@@ -60,7 +60,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
                                 {
                                     Plant = (string)dt["Plant"],
                                     Line = (string)dt["Line"],
-                                    H00 = (string)dt["H01"],
+                                    H00 = (string)dt["H00"],
                                     H01 = (string)dt["H01"],
                                     H02 = (string)dt["H02"],
                                     H03 = (string)dt["H03"],
