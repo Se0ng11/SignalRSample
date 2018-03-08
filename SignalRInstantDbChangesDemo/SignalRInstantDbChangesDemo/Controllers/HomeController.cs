@@ -26,5 +26,25 @@ namespace SignalRInstantDbChangesDemo.Controllers
 
             return Content(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json"); 
         }
+
+        public ContentResult SendMonitoringReport()
+        {
+            IQaiService dataResultService = new QaiService();
+            var data1 = dataResultService.GetMonitoringReportDetails();
+
+            var result = new { x = data1 };
+
+            return Content(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+        }
+
+        public ContentResult SendPercentageData()
+        {
+            IQaiService dataResultService = new QaiService();
+            var data1 = dataResultService.GetPercentageDataDetails();
+
+            var result = new { x = data1 };
+
+            return Content(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+        }
     }
 }

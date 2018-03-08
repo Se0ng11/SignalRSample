@@ -37,7 +37,8 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         }
         private void Dependency_OnChange(object sender, SqlNotificationEventArgs e)
         {
-            NewMessage?.Invoke(sender, e);
+            if (NewMessage != null)
+                NewMessage(sender, e);
             RegisterForNotifications();
         }
     }

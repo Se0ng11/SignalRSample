@@ -2,6 +2,7 @@
 using SignalRInstantDbChangesDemo.DataAccess;
 using SignalRInstantDbChangesDemo.Models;
 using System.Collections.Generic;
+using System;
 
 namespace SignalRInstantDbChangesDemo.Hubs
 {
@@ -11,13 +12,14 @@ namespace SignalRInstantDbChangesDemo.Hubs
         {
             Clients.All.updateMonitoringReport(messages);
         }
+        
         public MonitoringReportHub()
         {
-            void dispatcher(string messages)
-            { SendMonitoringReport(messages); }
+            Action<string> dispatcher = (messages) => { SendMonitoringReport(messages); };
+
             MonitoringReportRepository.GetInstance(dispatcher);
         }
-
     }
 
 }
+    

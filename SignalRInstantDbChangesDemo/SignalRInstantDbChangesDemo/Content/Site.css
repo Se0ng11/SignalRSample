@@ -1,12 +1,9 @@
-﻿
-/* Set padding to keep content from hitting the edges */
-.body-content {
+﻿.body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
 table {
-    /*user-select:none;*/  
     width: 100%; 
 }
 
@@ -72,10 +69,12 @@ table tbody tr.upperline {
 
 .yellow {
     background: yellow;
+    color: #000;
 }
 
 .lightblue {
     background: lightblue;
+    color: #000;
 }
 
 .blueviolet {
@@ -95,5 +94,15 @@ table tbody tr.upperline {
 
 .darkblue {
     background: blue;
+    color: #fff;
+}
+
+.hotpink{
+    background: hotpink;
+    color: #fff;
+}
+
+.darkorange{
+    background: darkorange;
     color: #fff;
 }

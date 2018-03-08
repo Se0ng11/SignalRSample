@@ -1,26 +1,36 @@
 ﻿var isBlink = false;
+var dateFormat = "YYYY/MM/DD HH:mm:ss";
 
 $(function () {
+    var mrh = $.connection.monitoringReportHub;
+    var pdh = $.connection.percentageDataHub;
 
-    isBlink = false;
-    var notifcation = $.connection.monitoringReportHub;
-
-    notifcation.client.updateMonitoringReport = function (serverResponse) {
+    mrh.client.updateMonitoringReport = function (serverResponse) {
         setTimeout(function () {
-            GetInformation();
+            GetMonitoringReport();
+        }, 200);
+
+        isBlink = true;
+    };
+
+    pdh.client.updatePercentageData = function (serverResponse) {
+        setTimeout(function () {
+            GetPercentageData();
         }, 200);
 
         isBlink = true;
     };
 
     $.connection.hub.start().done(function () {
-        GetInformation();
+        GenerateFooter();
+        GetDetailsInformation();
+        isBlink = false;
     }).fail(function (error) {
         alert(error);
     });
 });
 
-function GetInformation() {
+function GetDetailsInformation() {
     $.ajax({
         url: location.href + '/home/SendDetailsReport',
         contentType: 'application/html ; charset:utf-8',
@@ -29,15 +39,49 @@ function GetInformation() {
     }).success(function (result) {
         var pResult = JSON.parse(result);
         LiveDateTime(result.serverDate);
+        //CalculateBatch();
         if (pResult.length === 0) {
         }
         else
         {
-            if (!isBlink) {
-                GenerateTimeAndLine(pResult);
-            } else {
-                MassageData(pResult);
-            }
+            GenerateTimeAndLine(pResult);
+        }
+    }).error(function (error) {
+        alert(error);
+    });
+}
+
+function GetMonitoringReport() {
+    $.ajax({
+        url: location.href + '/home/SendMonitoringReport',
+        contentType: 'application/html ; charset:utf-8',
+        type: 'GET',
+        dataType: 'html'
+    }).success(function (result) {
+        var pResult = JSON.parse(result);
+        //CalculateBatch();
+        if (pResult.length === 0) {
+        }
+        else {
+            MassageData(pResult, 1);
+        }
+    }).error(function (error) {
+        alert(error);
+    });
+}
+
+function GetPercentageData() {
+    $.ajax({
+        url: location.href + '/home/SendPercentageData',
+        contentType: 'application/html ; charset:utf-8',
+        type: 'GET',
+        dataType: 'html'
+    }).success(function (result) {
+        var pResult = JSON.parse(result);
+        if (pResult.length === 0) {
+        }
+        else {
+            MassageData(pResult, 2);
         }
     }).error(function (error) {
         alert(error);
@@ -49,8 +93,8 @@ function GenerateTimeAndLine(data) {
     var time = 24;
     var th = table = td = row = "";
     var pad = "00";
-
     var partId = "";
+
     function Painting(td, color, value, keys) {
         if (j > 1) {
             var refineId = partId + keys.substr(keys.length - 2);
@@ -83,21 +127,16 @@ function GenerateTimeAndLine(data) {
 
         for (var j = 0; j <= keys.length - 1; j++) {
             var $value = temp["" + keys[j] + ""];
-            var pValue = second[i]["" + keys[j] + ""] || "";
-            var percentage = (pValue === 0 ? "" : pValue);
-
-            if ($value === "1") {
-                td += Painting(td, "green", percentage, keys[j]);
-            }else if ($value === "0") {
-                td += Painting(td, "dormant", percentage, keys[j]);
-            } else if ($value === "6") {
-                td += Painting(td, "lightblue", percentage, keys[j]);
-            } else if ($value === "3") {
-                td += Painting(td, "yellow", percentage, keys[j]);
-            } else if ($value === "7") {
-                td += Painting(td, "red", percentage, keys[j]);
-            } else {
-                td += Painting(td, "black", $value, keys[j]);
+            var pValue = (second.length === 0) ? "" :  second[i]["" + keys[j] + ""] || "";
+            var percentage = (pValue === 0 || pValue === "") ? "" : (pValue + "%");
+           
+            if (parseInt($value, 10) > -1 && parseInt($value, 10) < 10)
+            {
+                td += Painting(td, ConvertNumberToColor($value), percentage, keys[j]);
+            }
+            else
+            {
+                td += Painting(td, ConvertNumberToColor($value), $value, keys[j]);
             }
         }
 
@@ -129,8 +168,9 @@ function GenerateTimeAndLine(data) {
 function GenerateFooter() {
     var footer = "<div class=\"footer\">" +
     "<div>Hartalega NGC Sdn Bhd</div>" +
-    "<div>Current time: <span class=\"current-time\"></span></div>" +
-    "<div class=\"right\">Version: 0.1</div>" +
+    //"<div>Batch Job Last Run: <span class=\"curr-run\"></span></div>" +
+    //"<div>Next Batch Run Time: <span class=\"next-run\"></span></div>" +
+    "<div class=\"right\"><span class=\"current-time\"></span></div>" +
     "</div>";
 
     $('#divFooter').append(footer);
@@ -153,41 +193,140 @@ function IntervalColor() {
 }
 
 function LiveDateTime(serverDate) {
-    function SetLiveDateTime() {
-        serverDate = moment(serverDate).add('1', 'seconds').format("YYYY/MM/DD hh:mm:ss");
+    function CountLiveDateTime() {
+        serverDate = moment(serverDate).add('1', 'seconds').format(dateFormat);
         $(document).find('.current-time').html(serverDate);
     }
 
-    SetLiveDateTime();
+    CountLiveDateTime();
     setInterval(function () {
-        SetLiveDateTime();
+        CountLiveDateTime();
     }, 1000);
 }
 
-function GenerateBlinkAndColor(result) {
+function CalculateBatch(){
+    var $doc = $(document);
+    var $currRun = $doc.find('#divFooter .curr-run');
+    var $nextRun = $doc.find('#divFooter .next-run');
+    var $now = moment();
+
+    $currRun.text($now.format(dateFormat));
+    $nextRun.text($now.add('4', 'minutes').format(dateFormat));
+}
+
+function MassageData(data, methodType) {
+    var x = data.x;
+    var nArray = [];
+
+    if (x.length === 0 || $('table tbody tr').length ===0) {
+        location.reload();
+    }
+
+    for (var i = 0; i <= x.length - 1; i++) {
+        var key = Object.keys(x[i]);
+        var combine = x[i].Plant + x[i].Line;
+
+        for (var j = 0; j <= key.length - 1; j++) {
+            var id = "";
+            var status = "";
+            var message = "";
+            if (key[j].substring(0, 1) === "H") {
+                id = combine + key[j].slice(1);
+                status = ConvertNumberToColor(x[i][key[j]]);
+                message = HideNumber(x[i][key[j]]);
+                nArray.push({ id: id, status: status, message: message });
+            }
+        }
+    }
+
+    GenerateBlinkAndColor(nArray, methodType);
+}
+
+function ConvertNumberToColor(value) {
+    value = value.toString();
+    var color = "";
+    if (value === "1") {
+        color = "green";
+    } else if (value === "0") {
+        color = "dormant";
+    } else if (value === "2") {
+        color = "hotpink";
+    } else if (value === "3") {
+        color = "yellow";
+    } else if (value === "4") {
+        color = "blueviolet";
+    } else if (value === "5") {
+        color = "darkorange";
+    } else if (value === "6") {
+        color = "lightblue";
+    } else if (value === "7") {
+        color = "red";
+    } else  {
+        color = "black";
+    }
+
+    return color;
+}
+
+function HideNumber(value) {
+    var number = "";
+    var ary = ["0", "1", "2", "3", "4", "5", "6", "7"];
+
+    if (ary.indexOf(value)> -1) {
+        number = "";
+    } else {
+        number = value;
+    }
+    return number;
+}
+
+function GenerateBlinkAndColor(result, methodType) {
     var $table = $('table');
     $(result).each(function (i, x) {
         var $td = $table.find('tbody tr td[id="' + x.id + '"]');
         var $pC = $td.attr('class');
         var $nC = x.status;
-        if (isBlink) {
-            if ($pC !== $nC) {
-                PutHereToBlink($td, $pC, $nC);
+        var isReset = false;
+
+        if (methodType === 1) {
+            if ($nC !== "") {
+                if (isBlink) {
+                    if (!$td.hasClass($nC)) {
+                        PutHereToBlinkColor($td, $pC, $nC);
+                        isReset = true;
+                    }
+                }
+                else
+                {
+                    if (!$td.hasClass($nC)) {
+                        if ($td.hasClass('rightline')) {
+                            $td.removeClass($pC).addClass($nC + " rightline");
+                        }
+                    }
+                }
             }
-        }
-        else {
-            if ($pC !== $nC) {
-                if ($td.hasClass('rightline')) {
-                    $td.removeClass($pC).addClass($nC + " rightline");
+
+            if (isReset) {
+                $td.text(x.message);
+            }
+
+        } if (methodType === 2) {
+            var mPercent = x.message + "%";
+            if (x.message !== 0) {
+                if (mPercent !== $td.text()) {
+                    $td.text(x.message + "%");
+                }
+
+            } else if ($td.text().indexOf('%') > 0) {
+                if (mPercent !== $td.text()) {
+                    $td.text("");
                 }
             }
         }
-
-        $td.text(x.message);
     });
 }
 
-function PutHereToBlink(element, prevClass, newClass) {
+function PutHereToBlinkColor(element, prevClass, newClass) {
     var count = 0;
 
     var blink = setInterval(function () {
@@ -209,61 +348,5 @@ function PutHereToBlink(element, prevClass, newClass) {
 
             window.clearInterval(blink);
         }
-    }, 800);
-
-}
-
-function MassageData(data) {
-    var x = data.x;
-    var y = data.y;
-    var nArray = [];
-
-    for (var i = 0; i <= x.length - 1; i++) {
-        var key = Object.keys(x[i]);
-        var combine = x[i].Plant + x[i].Line;
-
-        for (var j = 0; j <= key.length - 1; j++) {
-            var id = "";
-            var status = "";
-            var message = "";
-            if (key[j].substring(0, 1) === "H") {
-                id = combine + key[j].slice(1);
-                status = ConvertNumberToColor(x[i][key[j]]);
-                message = (y[i][key[j]] != 0) ? y[i][key[j]] : HideNumber(x[i][key[j]]);
-                nArray.push({ id, status, message });
-            }
-        }
-    }
-
-    GenerateBlinkAndColor(nArray);
-}
-
-function ConvertNumberToColor(value) {
-    var color = "";
-    if (value === "1") {
-        color = "green";
-    } else if (value === "0") {
-        color = "dormant";
-    } else if (value === "6") {
-        color = "lightblue";
-    } else if (value === "3") {
-        color = "yellow";
-    } else if (value === "7") {
-        color = "red";
-    } else {
-        color = "black";
-    }
-
-    return color;
-
-}
-
-function HideNumber(value) {
-    var number = "";
-    if (value === "1" || value === "0" || value === "6" || value === "3" || value === "7") {
-        number = "";
-    } else {
-        number = value;
-    }
-    return number;
+    }, 500);
 }
