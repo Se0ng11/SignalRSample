@@ -354,35 +354,31 @@ function PutHereToBlinkColor(element, prevClass, newClass) {
 
 
 function OnClickPopOut() {
-
-    $('body').popover({
-        selector: '.main-table tbody tr td:not(.green):not(.dormant)',
-        trigger: 'click',
-        placement: 'auto right',
-        container: 'body',
-        html: true,
+    $('.main-table tbody tr td:not(.green):not(.dormant)').webuiPopover({
+        type: 'html',
+        width: '600px',
         content: function () {
+            function AssignValue(target, element) {
+                var $tr = target.closest('tr');
+                var $plant = $tr.find('td:nth(0)').text();
+                var $line = $tr.find('td:nth(1)').text();
+                var $slot = target.closest('tbody').prev().find('tr th:nth(' + target.index() + ')').text();
+                var $status = target.text();
+                var $color = target.attr('class');
+
+                element.find('#plant').html($plant);
+                element.find('#line').html($line);
+                element.find('#slot').html($slot);
+                element.find('#status').removeClass().addClass($color).html($status);
+            }
+
             var $this = $(this);
             var $info = $('#Popover-Info');
+
+            AssignValue($this, $info);
+
             var $content = $info.html();
-            $('.main-table tbody tr td').not(this).popover('destroy');
-            $('.popover').not('.in').remove();
             return $content;
-        }
-    });
-
-    $(document).on('click', function (e) {
-        var $popOver = $(e.target).data('bs.popover');
-        var $in = $('.popover.in');
-
-        if ($(e.target).closest($in).length === 0) {
-            if ($popOver !== undefined) {
-                if ($popOver.type !== 'popover'){
-                    $in.remove();
-                }
-            } else {
-                $in.remove();
-            }
         }
     });
 }

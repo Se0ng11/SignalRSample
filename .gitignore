@@ -12,3 +12,10 @@
 *.suo
 *.cache
 *.txt
+SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment-with-locales.js
+SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment.js
+SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment-with-locales.min.js
+SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment-with-locales.min.js
+SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment.min.js
+*.dll
+*.cache
