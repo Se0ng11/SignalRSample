@@ -159,10 +159,11 @@ function GenerateTimeAndLine(data) {
         th += "<th>" + ('0' + i).slice(-2) + "</th>";
     }
 
-    table = "<table class=\"\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>";
+    table = "<table class=\"main-table\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>";
 
     $('#divLine').append(table);
     IntervalColor();
+    OnClickPopOut();
 }
 
 function GenerateFooter() {
@@ -178,7 +179,7 @@ function GenerateFooter() {
 
 function IntervalColor() {
     function SetIntervalColor() {
-        var $table = $('table');
+        var $table = $('.main-table');
         var $hour = moment().hour();
         var $targetHour = ("0" + $hour).slice(-2);
         $table.find('thead tr th.darkblue:nth(0)').removeClass('darkblue');
@@ -218,7 +219,7 @@ function MassageData(data, methodType) {
     var x = data.x;
     var nArray = [];
 
-    if (x.length === 0 || $('table tbody tr').length ===0) {
+    if (x.length === 0 || $('.main-table tbody tr').length === 0) {
         location.reload();
     }
 
@@ -281,7 +282,7 @@ function HideNumber(value) {
 }
 
 function GenerateBlinkAndColor(result, methodType) {
-    var $table = $('table');
+    var $table = $('.main-table');
     $(result).each(function (i, x) {
         var $td = $table.find('tbody tr td[id="' + x.id + '"]');
         var $pC = $td.attr('class');
@@ -349,4 +350,39 @@ function PutHereToBlinkColor(element, prevClass, newClass) {
             window.clearInterval(blink);
         }
     }, 500);
+}
+
+
+function OnClickPopOut() {
+
+    $('body').popover({
+        selector: '.main-table tbody tr td:not(.green):not(.dormant)',
+        trigger: 'click',
+        placement: 'auto right',
+        container: 'body',
+        html: true,
+        content: function () {
+            var $this = $(this);
+            var $info = $('#Popover-Info');
+            var $content = $info.html();
+            $('.main-table tbody tr td').not(this).popover('destroy');
+            $('.popover').not('.in').remove();
+            return $content;
+        }
+    });
+
+    $(document).on('click', function (e) {
+        var $popOver = $(e.target).data('bs.popover');
+        var $in = $('.popover.in');
+
+        if ($(e.target).closest($in).length === 0) {
+            if ($popOver !== undefined) {
+                if ($popOver.type !== 'popover'){
+                    $in.remove();
+                }
+            } else {
+                $in.remove();
+            }
+        }
+    });
 }
