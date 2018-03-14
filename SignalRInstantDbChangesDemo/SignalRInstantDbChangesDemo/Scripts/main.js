@@ -1,7 +1,24 @@
 ﻿var isBlink = false;
 var dateFormat = "YYYY/MM/DD HH:mm:ss";
+var attempt = 1;
 
 $(function () {
+    InitialSignalR();
+});
+
+function InitialSignalR() {
+    function StartHub() {
+        $.connection.hub.start().done(function () {
+            attempt = 1;
+            GenerateFooter();
+            GetDetailsInformation();
+            isBlink = false;
+        }).fail(function (error) {
+            Notify(attempt + " attempt to reconnect to the server...", "danger");
+            attempt += 1;
+        });
+    }
+
     var mrh = $.connection.monitoringReportHub;
     var pdh = $.connection.percentageDataHub;
 
@@ -21,14 +38,31 @@ $(function () {
         isBlink = true;
     };
 
-    $.connection.hub.start().done(function () {
-        GenerateFooter();
-        GetDetailsInformation();
-        isBlink = false;
-    }).fail(function (error) {
-        alert(error);
+    StartHub();
+
+    $.connection.hub.reconnecting(function () {
+        Notify("Connection interrupted, reconnecting...", "danger");
     });
-});
+
+    $.connection.hub.disconnected(function () {
+        setTimeout(function () {
+            StartHub();
+        }, 5000);
+    });
+}
+
+function Notify(msg, msgType) {
+    $.notify({
+        icon: 'glyphicon glyphicon-warning-sign',
+        message: msg
+    }, {
+        type: msgType,
+        placement: {
+            align: "left"
+        },
+        allow_dismiss: false,
+    });
+}
 
 function GetDetailsInformation() {
     $.ajax({
@@ -39,7 +73,6 @@ function GetDetailsInformation() {
     }).success(function (result) {
         var pResult = JSON.parse(result);
         LiveDateTime(result.serverDate);
-        //CalculateBatch();
         if (pResult.length === 0) {
         }
         else
@@ -47,7 +80,7 @@ function GetDetailsInformation() {
             GenerateTimeAndLine(pResult);
         }
     }).error(function (error) {
-        alert(error);
+        Notify(error, "danger");
     });
 }
 
@@ -59,14 +92,13 @@ function GetMonitoringReport() {
         dataType: 'html'
     }).success(function (result) {
         var pResult = JSON.parse(result);
-        //CalculateBatch();
         if (pResult.length === 0) {
         }
         else {
             MassageData(pResult, 1);
         }
     }).error(function (error) {
-        alert(error);
+        Notify(error, "danger");
     });
 }
 
@@ -84,7 +116,7 @@ function GetPercentageData() {
             MassageData(pResult, 2);
         }
     }).error(function (error) {
-        alert(error);
+        Notify(error, "danger");
     });
 }
 
@@ -127,7 +159,7 @@ function GenerateTimeAndLine(data) {
 
         for (var j = 0; j <= keys.length - 1; j++) {
             var $value = temp["" + keys[j] + ""];
-            var pValue = (second.length === 0) ? "" :  second[i]["" + keys[j] + ""] || "";
+            var pValue = (second.length === 0) ? "" : second[i]["" + keys[j] + ""] || "";
             var percentage = (pValue === 0 || pValue === "") ? "" : (pValue + "%");
            
             if (parseInt($value, 10) > -1 && parseInt($value, 10) < 10)
@@ -169,12 +201,12 @@ function GenerateTimeAndLine(data) {
 function GenerateFooter() {
     var footer = "<div class=\"footer\">" +
     "<div>Hartalega NGC Sdn Bhd</div>" +
-    //"<div>Batch Job Last Run: <span class=\"curr-run\"></span></div>" +
-    //"<div>Next Batch Run Time: <span class=\"next-run\"></span></div>" +
+    "<div>Batch Job Last Run: <span class=\"curr-run\"></span></div>" +
+    "<div>Next Batch Run Time: <span class=\"next-run\"></span></div>" +
     "<div class=\"right\"><span class=\"current-time\"></span></div>" +
     "</div>";
 
-    $('#divFooter').append(footer);
+    $('#divFooter').empty().append(footer);
 }
 
 function IntervalColor() {
@@ -315,7 +347,7 @@ function GenerateBlinkAndColor(result, methodType) {
             var mPercent = x.message + "%";
             if (x.message !== 0) {
                 if (mPercent !== $td.text()) {
-                    $td.text(x.message + "%");
+                    $td.text(mPercent);
                 }
 
             } else if ($td.text().indexOf('%') > 0) {
@@ -329,34 +361,40 @@ function GenerateBlinkAndColor(result, methodType) {
 
 function PutHereToBlinkColor(element, prevClass, newClass) {
     var count = 0;
+    var blink = 'blink';
 
-    var blink = setInterval(function () {
+    var $blink = setInterval(function () {
         if (element.hasClass('rightline')) {
-            element.toggleClass("" + prevClass + "" + " " + newClass + " rightline");
+            element.addClass(blink).toggleClass("" + prevClass + "" + " " + newClass + " rightline");
         } else {
-            element.toggleClass("" + prevClass + "" + " " + newClass);
+            element.addClass(blink).toggleClass("" + prevClass + "" + " " + newClass);
         }
 
         count += 1;
         if (count === 10) {
 
             if (element.hasClass('rightline')){
-                element.removeClass(prevClass).addClass(newClass + " rightline");
+                element.removeClass(prevClass + " " + blink).addClass(newClass + " rightline");
             }
             else {
-                element.removeClass(prevClass).addClass(newClass);
+                element.removeClass(prevClass + " " + blink).addClass(newClass);
             }
 
-            window.clearInterval(blink);
+            window.clearInterval($blink);
         }
     }, 500);
 }
 
-
 function OnClickPopOut() {
     $('.main-table tbody tr td:not(.green):not(.dormant)').webuiPopover({
         type: 'html',
-        width: '600px',
+        width: '800px',
+        //async: {
+        //    type:'GET', // ajax request method type, default is GET
+        //    before: function(that, xhr, settings) {},//executed before ajax request
+        //    success: function(that, data) {},//executed after successful ajax request
+        //    error: function(that, xhr, data) {} //executed after error ajax request
+        //    },
         content: function () {
             function AssignValue(target, element) {
                 var $tr = target.closest('tr');

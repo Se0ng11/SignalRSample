@@ -19,3 +19,5 @@ SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment-wit
 SignalRInstantDbChangesDemo/packages/Moment.js.2.20.1/Content/Scripts/moment.min.js
 *.dll
 *.cache
+*.dll
+*.pdb
