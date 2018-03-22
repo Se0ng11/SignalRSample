@@ -1,18 +1,33 @@
 ﻿var isBlink = false;
 var dateFormat = "YYYY/MM/DD HH:mm:ss";
+var attempt = 1;
+var tempProdLine = "";
+var tempDefectData = "";
+var retryTimer = 5000;
 
 $(function () {
     InitialSignalR();
 });
 
 function InitialSignalR() {
+    function StartHub() {
+        $.connection.hub.start().done(function () {
+            attempt = 1;
+            GetDetailsInformation();
+            isBlink = false;
+        }).fail(function (error) {
+            NotifyWarning(attempt + " attempt to reconnect to the server...");
+            attempt += 1;
+        });
+    }
+
     var mrh = $.connection.monitoringReportHub;
     var pdh = $.connection.percentageDataHub;
 
     mrh.client.updateMonitoringReport = function (serverResponse) {
         setTimeout(function () {
             GetMonitoringReport();
-        }, 200);
+        }, retryTimer);
 
         isBlink = true;
     };
@@ -20,86 +35,111 @@ function InitialSignalR() {
     pdh.client.updatePercentageData = function (serverResponse) {
         setTimeout(function () {
             GetPercentageData();
-        }, 200);
+        }, retryTimer);
 
         isBlink = true;
     };
 
-    $.connection.hub.start().done(function () {
-        GenerateFooter();
-        GetDetailsInformation();
-        isBlink = false;
-    }).fail(function (error) {
-        alert(error);
+    StartHub();
+
+    $.connection.hub.reconnecting(function () {
+        NotifyWarning("Connection interrupted, reconnecting...");
     });
 
     $.connection.hub.disconnected(function () {
         setTimeout(function () {
-            $.connection.hub.start();
-        }, 5000);
+            StartHub();
+        }, retryTimer);
     });
 }
 
-
 function GetDetailsInformation() {
     $.ajax({
-        url: location.href + '/home/SendDetailsReport',
-        contentType: 'application/html ; charset:utf-8',
-        type: 'GET',
-        dataType: 'html'
+        url: location.href + '/home/GetDetailsReport',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET'
     }).success(function (result) {
-        var pResult = JSON.parse(result);
         LiveDateTime(result.serverDate);
-        //CalculateBatch();
-        if (pResult.length === 0) {
+        if (result.length === 0) {
         }
-        else
+        else 
         {
-            GenerateTimeAndLine(pResult);
+            tempProdLine = result.pl;
+            tempDefectData = result.dd;
+            GenerateTimeAndLine(result.mr, result.pd);
         }
     }).error(function (error) {
-        alert(error);
+        NotifyWarning("GetDetailsInformation(): " + error.statusText);
+        setTimeout(function () {
+            GetDetailsInformation();
+        }, retryTimer);
     });
 }
 
 function GetMonitoringReport() {
     $.ajax({
-        url: location.href + '/home/SendMonitoringReport',
-        contentType: 'application/html ; charset:utf-8',
+        url: location.href + '/home/GetMonitoringReport',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
         type: 'GET',
-        dataType: 'html'
     }).success(function (result) {
-        var pResult = JSON.parse(result);
-        //CalculateBatch();
-        if (pResult.length === 0) {
+        if (result.length === 0) {
         }
         else {
-            MassageData(pResult, 1);
+            MassageData(result.mr, 1);
         }
     }).error(function (error) {
-        alert(error);
+        NotifyWarning("GetMonitoringReport(): " + error.statusText);
+        setTimeout(function () {
+            GetMonitoringReport();
+        }, retryTimer);
     });
 }
 
 function GetPercentageData() {
     $.ajax({
-        url: location.href + '/home/SendPercentageData',
-        contentType: 'application/html ; charset:utf-8',
-        type: 'GET',
-        dataType: 'html'
+        url: location.href + '/home/GetPercentageData',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET'
     }).success(function (result) {
-        var pResult = JSON.parse(result);
-        if (pResult.length === 0) {
+        if (result.length === 0) {
         }
         else {
-            MassageData(pResult, 2);
+            tempDefectData = result.dd;
+            MassageData(result.pd, 2);
+
         }
     }).error(function (error) {
-        alert(error);
+        NotifyWarning("GetPercentageData(): " + error.statusText);
+        setTimeout(function () {
+            GetPercentageData();
+        }, retryTimer);
     });
 }
 
-function GenerateTimeAndLine(data) {
+function GetProductionLine() {
+    $.ajax({
+        url: location.href + '/home/GetProductionLine',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+    }).success(function (result) {
+        if (result.length === 0) {
+        }
+        else {
+            tempProdLine = result.pl;
+        }
+    }).error(function (error) {
+        NotifyWarning("GetProductionLine(): " + error.statusText);
+        setTimeout(function () {
+            GetProductionLine();
+        }, retryTimer);
+    });
+}
+
+function GenerateTimeAndLine(monitoringReport, percentageData) {
     $('#divLine').empty();
     var time = 24;
     var th = table = td = row = "";
@@ -129,16 +169,14 @@ function GenerateTimeAndLine(data) {
         return td;
     }
 
-    var first = data.x;
-    var second = data.y;
     var previous = "";
-    for (var i = 0; i <= first.length - 1; i++) {
-        var temp = first[i];
+    for (var i = 0; i <= monitoringReport.length - 1; i++) {
+        var temp = monitoringReport[i];
         var keys = Object.keys(temp);
 
         for (var j = 0; j <= keys.length - 1; j++) {
             var $value = temp["" + keys[j] + ""];
-            var pValue = (second.length === 0) ? "" : second[i]["" + keys[j] + ""] || "";
+            var pValue = (percentageData.length === 0) ? "" : percentageData[i]["" + keys[j] + ""] || "";
             var percentage = (pValue === 0 || pValue === "") ? "" : (pValue + "%");
            
             if (parseInt($value, 10) > -1 && parseInt($value, 10) < 10)
@@ -152,12 +190,12 @@ function GenerateTimeAndLine(data) {
         }
 
         if (previous === "") {
-            previous = first[i].Plant;
+            previous = monitoringReport[i].Plant;
         }
 
-        if (first[i].Plant !== previous) {
+        if (monitoringReport[i].Plant !== previous) {
             row += "<tr class=\"upperline\">" + td + "</tr>";
-            previous = first[i].Plant;
+            previous = monitoringReport[i].Plant;
         }
         else {
             row += "<tr>" + td + "</tr>";
@@ -174,18 +212,7 @@ function GenerateTimeAndLine(data) {
 
     $('#divLine').append(table);
     IntervalColor();
-    OnClickPopOut();
-}
-
-function GenerateFooter() {
-    var footer = "<div class=\"footer\">" +
-    "<div>Hartalega NGC Sdn Bhd</div>" +
-    "<div>Batch Job Last Run: <span class=\"curr-run\"></span></div>" +
-    "<div>Next Batch Run Time: <span class=\"next-run\"></span></div>" +
-    "<div class=\"right\"><span class=\"current-time\"></span></div>" +
-    "</div>";
-
-    $('#divFooter').append(footer);
+    InitialOnClickPopOut();
 }
 
 function IntervalColor() {
@@ -227,16 +254,16 @@ function CalculateBatch(){
 }
 
 function MassageData(data, methodType) {
-    var x = data.x;
+    var x = data;
     var nArray = [];
 
-    if (x.length === 0 || $('.main-table tbody tr').length === 0) {
+    if (data.length === 0 || $('.main-table tbody tr').length === 0) {
         location.reload();
     }
 
-    for (var i = 0; i <= x.length - 1; i++) {
-        var key = Object.keys(x[i]);
-        var combine = x[i].Plant + x[i].Line;
+    for (var i = 0; i <= data.length - 1; i++) {
+        var key = Object.keys(data[i]);
+        var combine = data[i].Plant + data[i].Line;
 
         for (var j = 0; j <= key.length - 1; j++) {
             var id = "";
@@ -244,8 +271,8 @@ function MassageData(data, methodType) {
             var message = "";
             if (key[j].substring(0, 1) === "H") {
                 id = combine + key[j].slice(1);
-                status = ConvertNumberToColor(x[i][key[j]]);
-                message = HideNumber(x[i][key[j]]);
+                status = ConvertNumberToColor(data[i][key[j]]);
+                message = HideNumber(data[i][key[j]]);
                 nArray.push({ id: id, status: status, message: message });
             }
         }
@@ -294,6 +321,7 @@ function HideNumber(value) {
 
 function GenerateBlinkAndColor(result, methodType) {
     var $table = $('.main-table');
+  
     $(result).each(function (i, x) {
         var $td = $table.find('tbody tr td[id="' + x.id + '"]');
         var $pC = $td.attr('class');
@@ -304,6 +332,7 @@ function GenerateBlinkAndColor(result, methodType) {
             if ($nC !== "") {
                 if (isBlink) {
                     if (!$td.hasClass($nC)) {
+                        $td.webuiPopover('destroy');
                         PutHereToBlinkColor($td, $pC, $nC);
                         isReset = true;
                     }
@@ -315,6 +344,8 @@ function GenerateBlinkAndColor(result, methodType) {
                             $td.removeClass($pC).addClass($nC + " rightline");
                         }
                     }
+                    
+
                 }
             }
 
@@ -358,44 +389,145 @@ function PutHereToBlinkColor(element, prevClass, newClass) {
             else {
                 element.removeClass(prevClass + " " + blink).addClass(newClass);
             }
-
             window.clearInterval($blink);
+            if (newClass !== "green" && newClass !== "dormant"){
+                InitialOnClickPopOut(element);
+            }
         }
     }, 500);
 }
 
-function OnClickPopOut() {
-    $('.main-table tbody tr td:not(.green):not(.dormant)').webuiPopover({
-        type: 'html',
-        width: '800px',
-        //async: {
-        //    type:'GET', // ajax request method type, default is GET
-        //    before: function(that, xhr, settings) {},//executed before ajax request
-        //    success: function(that, data) {},//executed after successful ajax request
-        //    error: function(that, xhr, data) {} //executed after error ajax request
-        //    },
-        content: function () {
-            function AssignValue(target, element) {
-                var $tr = target.closest('tr');
-                var $plant = $tr.find('td:nth(0)').text();
-                var $line = $tr.find('td:nth(1)').text();
-                var $slot = target.closest('tbody').prev().find('tr th:nth(' + target.index() + ')').text();
-                var $status = target.text();
-                var $color = target.attr('class');
+function InitialOnClickPopOut(element) {
 
-                element.find('#plant').html($plant);
-                element.find('#line').html($line);
-                element.find('#slot').html($slot);
-                element.find('#status').removeClass().addClass($color).html($status);
+    function InitialProductionLinePO() {
+        $('.main-table tbody tr td:nth-child(2)').webuiPopover({
+            type: 'html',
+            cache: false,
+            container: ".body-content",
+            placement: 'horizontal',
+            title:'Details',
+            content: function () {
+                return GenerateContent(this, 'line');
+            },
+            onHide: function ($element) {
+                $('.in').remove();
+            }
+        });
+    }
+
+    function InitialDetailsPO(element) {
+        var $element = (element == undefined ? $('.main-table tbody tr td:nth-child(n+3):not(.green):not(.dormant)') : element);
+        $element.webuiPopover({
+            type: 'html',
+            cache: false,
+            container: ".body-content",
+            placement: 'auto',
+            title: "Details",
+            content: function () {
+                return GenerateContent(this, 'detail');
+            },
+            onHide: function ($element) {
+                $('.in').remove();
+            }
+        });
+    }
+
+    function GenerateContent(target, mode) {
+        var $this = $(target);
+        var $tr = $this.closest('tr');
+
+        var $container = $('#Popover-Info');
+
+        var $plant = $tr.find('td:nth(0)').text();
+        var $line = $tr.find('td:nth(1)').text();
+
+        $container.find('.plant').html($plant);
+        $container.find('.line').html($line);
+
+        $container.find('div').hide();
+
+        if (mode === "detail")
+        {
+            $container.find('#divDefectDetails').show();
+            var $slot = $this.closest('tbody').prev().find('tr th:nth(' + $this.index() + ')').text();
+            var $status = $this.text();
+            var $color = $this.attr('class');
+
+            $container.find('#slot').html($slot);
+            $container.find('#status').removeClass().addClass($color).html($status);
+
+            function getColumns() {
+                for (var i = 0; i < tempDefectData.length; i++) {
+                    let columnsArray = [];
+                    var keys = Object.keys(tempDefectData[i]);
+                    for (k in Object.keys(tempDefectData[i])) {
+                        if (tempDefectData[i].hasOwnProperty(keys[k])) {
+                            columnsArray.push({
+                                "title": keys[k],
+                                "data": keys[k]
+                            });
+                        }
+                    }
+                    return columnsArray;
+                }
             }
 
-            var $this = $(this);
-            var $info = $('#Popover-Info');
+            var $dd = $('#tblDefectDetails');
 
-            AssignValue($this, $info);
+            if ($.fn.DataTable.isDataTable("#tblDefectDetails")) {
+                $dd.DataTable().clear().destroy();
+            }
 
-            var $content = $info.html();
-            return $content;
+            var $defects = tempDefectData.filter(function (e) {
+                return e.Plant === $plant & e.Line === $line && e.Slot === parseInt($slot)
+            });
+
+            var table = $dd.DataTable({
+                "columns": getColumns(),
+                "data": $defects,
+                "searching": false,
+                "lengthChange": false,
+                "info": false
+            });
+
+            table.columns([0, 4, 5, 8, 9]).visible(false, false);
+            table.columns.adjust().draw(false);
+
         }
+        else if (mode === "line") {
+
+           
+            $container.find('#divLineInfo').show();
+            var $prod = tempProdLine.filter(function (e) {
+                return e.LineId === $line
+            });
+
+            var keys = Object.keys($prod[0]);
+
+            $(keys).each(function (i, v) {
+                $container.find('#' + v).text($prod[0][v]);
+            });
+        }
+
+        var $content = $container.html();
+        return $content;
+    }
+
+    InitialProductionLinePO();
+    InitialDetailsPO(element);
+}
+
+function NotifyWarning(msg) {
+    $.notify({
+        icon: 'glyphicon glyphicon-warning-sign',
+        message: msg
+    }, {
+        type: "danger",
+        placement: {
+            align: "left"
+        },
+        allow_dismiss: true,
+        newest_on_top: true,
+        delay: retryTimer
     });
 }

@@ -1,0 +1,208 @@
+﻿<div id="divLineInfo">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th class="success">Plant</th>
+                <td class="plant"></td>
+                <th class="success">Line</th>
+                <td class="line"></td>
+            </tr>
+            <tr>
+                <th class="success">Operator Id</th>
+                <td id="OperatorId"></td>
+                <th class="success">Frequency</th>
+                <td id="BatchFrequency"></td>
+                <th class="success">Online</th>
+                <td id="IsOnline"></td>
+            </tr>
+            <tr>
+                <th class="success">Formers</th>
+                <td id="Formers"></td>
+                <th class="success">Cycle</th>
+                <td id="Cycle"></td>
+                <th class="success">Speed</th>
+                <td id="Speed"></td>
+            </tr>
+            <tr>
+                <th class="success">LT Glove Type</th>
+                <td id="LTGloveType"></td>
+                <th class="success">LT Alt Glove</th>
+                <td id="LTAltGlove"></td>
+                <th class="success">Size</th>
+                <td id="LTGloveSize"></td>
+            </tr>
+            <tr>
+                <th class="success">LB Glove Type</th>
+                <td id="LBGloveType"></td>
+                <th class="success">LB Alt Glove</th>
+                <td id="LBAltGlove"></td>
+                <th class="success">Size</th>
+                <td id="LBGloveSize"></td>
+            </tr>
+            <tr>
+                <th class="success">RT Glove Type</th>
+                <td id="RTGloveType"></td>
+                <th class="success">RT Alt Glove</th>
+                <td id="RTAltGlove"></td>
+                <th class="success">Size</th>
+                <td id="RTGloveSize"></td>
+            </tr>
+            <tr>
+                <th class="success">RB Glove Type</th>
+                <td id="RBGloveType"></td>
+                <th class="success">RB Alt Glove</th>
+                <td id="RBAltGlove"></td>
+                <th class="success">Size</th>
+                <td id="RBGloveSize"></td>
+            </tr>
+        </tbody>
+        </table>
+
+</div>
+
+
+@*<div id="LineInfo" class="container-fluid">
+    <div class="col-md-12 col-xs-12">
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>Plant</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p class="plant"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Line</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p class="line"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label></label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>Operator</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="OperatorId"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Frequency</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="BatchFrequency"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Online</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="IsOnline"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>Formers</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="Formers"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Cycle</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="Cycle"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Speed</label>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <p id="Speed"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>LT Glove Type</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="LTGloveType"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>LT Alt Glove</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="LTAltGlove"></p>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <label>Size</label>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <p id="LTGloveSize"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>LB Glove Type</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="LBGloveType"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>LB Alt Glove</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="LBAltGlove"></p>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <label>Size</label>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <p id="LBGloveSize"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>RT Glove Type</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="RTGloveType"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>RT Alt Glove</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="RTAltGlove"></p>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <label>Size</label>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <p id="RTGloveSize"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+                <label>RB Glove Type</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="RBGloveType"></p>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>RB Alt Glove</label>
+            </div>
+            <div class="col-md-3 col-xs-3">
+                <p id="RBAltGlove"></p>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <label>Size</label>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <p id="RBGloveSize"></p>
+            </div>
+        </div>
+
+    </div>
+</div>*@

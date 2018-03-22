@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B3D5D4
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hartalega.FloorSystem.Framework", "..\..\..\Users\teoh.ws\Source\Floor System\Release\Hartalega.FloorSystem.Framework\Hartalega.FloorSystem.Framework.csproj", "{C58265AF-4F65-404A-ACDC-CDF77B7C937A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,18 +32,6 @@ Global
 		{11CC1832-D8C7-47B7-BC77-6F5F0E6F69E9}.SIT|Any CPU.Build.0 = Release|Any CPU
 		{11CC1832-D8C7-47B7-BC77-6F5F0E6F69E9}.UAT|Any CPU.ActiveCfg = Release|Any CPU
 		{11CC1832-D8C7-47B7-BC77-6F5F0E6F69E9}.UAT|Any CPU.Build.0 = Release|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Production|Any CPU.ActiveCfg = Production|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Production|Any CPU.Build.0 = Production|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.QA|Any CPU.ActiveCfg = QA|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.QA|Any CPU.Build.0 = QA|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.SIT|Any CPU.ActiveCfg = SIT|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.SIT|Any CPU.Build.0 = SIT|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.UAT|Any CPU.ActiveCfg = UAT|Any CPU
-		{C58265AF-4F65-404A-ACDC-CDF77B7C937A}.UAT|Any CPU.Build.0 = UAT|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

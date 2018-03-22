@@ -1,32 +1,34 @@
 ﻿.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+}
+
+.main-table thead tr th {
+    border: 1px solid lightgrey;
+    text-align:center;
+}
+
+table tbody tr th,
+table tbody tr td {
+  white-space:nowrap;
 }
 
 .main-table {
     width: 100%; 
     user-select: none;  
 }
-
-table thead tr th {
-    border: 1px solid lightgrey;
-}
-
 .main-table tbody tr td{
-    line-height: 0.97;
+    line-height: 1.05;
     border: 1px solid lightgrey;
     width: 30px;
     padding:0;
 }
 
-table thead tr th,
 .main-table tbody tr td:nth-child(-n+2){
     background: #f5f5f5;
     text-align:center;
     font-weight: bold;
 }
 
-.main-table tbody tr td:nth-child(-n+2) {
+.main-table tbody tr td:nth-child(2) {
     cursor: pointer;
 }
 
@@ -55,7 +57,10 @@ table thead tr th,
 .footer div:not(.right) {
     border: 1px solid #fff;
     display: inline;
-    padding-right:120px;
+}
+
+.footer .middle {
+    padding-left: 100px;
 }
 
 .footer .right {
@@ -121,4 +126,12 @@ table thead tr th,
 
 .display-none{
     display: none;
+}
+
+.webui-popover-min-width{
+    min-width: 500px;
+}
+
+#tblDefectDetails_wrapper .row {
+    margin-right: 0;
 }

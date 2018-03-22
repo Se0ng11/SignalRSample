@@ -15,15 +15,18 @@ namespace SignalRInstantDbChangesDemo
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
                       "~/Scripts/jquery.webui-popover.js",
-                      "~/Scripts/bootstrap-notify.js"));
+                      "~/Scripts/bootstrap-notify.js",
+                      "~/Scripts/DataTables/jquery.dataTables.js",
+                      "~/Scripts/DataTables/dataTables.bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
                       "~/Scripts/moment.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/jquery.webui-popover.css"));
+                      "~/Content/jquery.webui-popover.css",
+                      "~/Content/DataTables/css/dataTables.bootstrap.css",
+                      "~/Content/site.css"));
 
         }
     }

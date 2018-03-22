@@ -1,38 +1,31 @@
 ﻿<div id="Popover-Info" class="display-none">
     <div class="container-fluid">
-        <row><h3>Details</h3></row>
-        <row>
-            <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12 col-sx-12">
+                <h4>Details</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sx-12">
                 <table id="table-info" class="table table-bordered">
-                    <thead></thead>
                     <tbody>
                         <tr>
                             <th class="success">Plant</th>
                             <td id="plant"></td>
                             <th class="success">Line</th>
                             <td id="line"></td>
+                        </tr>
+                        <tr class="detail">
+                            <th class="success">Status</th>
+                            <td id="status"></td>
                             <th class="success">Slot</th>
                             <td id="slot"></td>
                         </tr>
-                        <tr>
-                            <th class="success">Status</th>
-                            <td id="status"></td>
-                        </tr>
                     </tbody>
                 </table>
-
-                <table id="table-details" class="table table-condensed table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>info 1</th>
-                            <th>info 2</th>
-                            <th>info 3</th>
-                            <th>info 4</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                
+                @Html.Partial("~/Views/Shared/_LineInfo.cshtml")
             </div>
-        </row>
+        </div>
     </div>
 </div>

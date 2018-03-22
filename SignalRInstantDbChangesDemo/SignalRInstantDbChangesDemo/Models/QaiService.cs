@@ -17,5 +17,18 @@ namespace SignalRInstantDbChangesDemo.Models
             PercentageDataRepository obj = new PercentageDataRepository();
             return obj.GetDataResultRecords();
         }
+
+        public List<ProductionLine> GetProductionLineDetails()
+        {
+            ProductionLineRepository obj = new ProductionLineRepository();
+            return obj.GetDataResultRecords();
+        }
+
+        public List<DefectDetails> GetDefectDetails()
+        {
+            DefectDetailsRepository obj = new DefectDetailsRepository();
+
+            return obj.GetDataResultRecords();
+        }
     }
 }

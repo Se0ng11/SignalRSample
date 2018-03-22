@@ -1,4 +1,4 @@
-﻿using Hartalega.FloorSystem.Framework.DbExceptionLog;
+﻿using SignalRInstantDbChangesDemo.Function;
 using SignalRInstantDbChangesDemo.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         static MonitoringReportRepository _instance = null;
         NewMessageNotifier _newMessageNotifier;
         Action<string> _dispatcher;
-        private string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIMonitoringReport] ORDER BY [Line]";
 
         public static MonitoringReportRepository GetInstance(Action<string> dispatcher)
@@ -33,7 +32,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         public MonitoringReportRepository(Action<string> dispatcher)
         {
             _dispatcher = dispatcher;
-            _newMessageNotifier = new NewMessageNotifier(_connString, _selectQuery);
+            _newMessageNotifier = new NewMessageNotifier(Common.ConnectionString(), _selectQuery);
             _newMessageNotifier.NewMessage += NewMessageRecieved;
 
         }
@@ -49,7 +48,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
 
             try
             {
-                using (var connection = new SqlConnection(_connString))
+                using (var connection = new SqlConnection(Common.ConnectionString()))
                 {
                     using (SqlCommand command = new SqlCommand(_selectQuery, connection))
                     {
@@ -94,15 +93,6 @@ namespace SignalRInstantDbChangesDemo.DataAccess
             }
             catch (Exception ex)
             {
-                FloorSystemException fse = null;
-                fse.screenName = "";
-                fse.uiClassName = "QAIMonitoringSystem";
-                fse.uiControlName = "MonitoringReportRepository";
-                fse.WorkStationId = "";
-                fse.baseexception = ex.Message;
-
-                fse.LogExceptionToDB(null);
-
             }
            
 

@@ -1,11 +1,19 @@
 ﻿<div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 col-xs-12">
         <div id="divLine"></div>
-        <div id="divFooter"></div>
+        <div class="footer">
+            <div>Hartalega NGC Sdn Bhd</div>
+            <div class="middle">Batch Job Last Run: <span class="curr-run"></span></div>
+            <div class="middle">Next Batch Run Time: <span class="next-run"></span></div>
+            <div class="right"><span class="current-time"></span></div>
+        </div>
     </div>
 </div>
-
-@Html.Partial("~/Views/Shared/_Details.cshtml")
+   
+<div id="Popover-Info" class="display-none">
+    @Html.Partial("~/Views/Shared/_LineInfo.cshtml")
+    @Html.Partial("~/Views/Shared/_DefectDetails.cshtml")
+</div>
 
 @section Scripts{
     <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.2.js")"></script>

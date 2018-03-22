@@ -69,7 +69,6 @@ C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Antlr3.Runtime.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\EntityFramework.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\EntityFramework.SqlServer.dll
-C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Hartalega.FS.Framework.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Microsoft.AspNet.Identity.Core.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -98,7 +97,6 @@ C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\System.Web.WebPages.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\System.Web.WebPages.Razor.dll
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\WebGrease.dll
-C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Hartalega.FS.Framework.pdb
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Antlr3.Runtime.pdb
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\EntityFramework.xml
 C:\source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\EntityFramework.SqlServer.xml

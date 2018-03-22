@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
 using SignalRInstantDbChangesDemo.DataAccess;
-using SignalRInstantDbChangesDemo.Models;
-using System.Collections.Generic;
 using System;
 
 namespace SignalRInstantDbChangesDemo.Hubs

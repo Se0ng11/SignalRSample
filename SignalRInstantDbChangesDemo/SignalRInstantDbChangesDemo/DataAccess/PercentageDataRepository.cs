@@ -1,5 +1,4 @@
-﻿using Hartalega.FloorSystem.Framework.DbExceptionLog;
-using SignalRInstantDbChangesDemo.Models;
+﻿using SignalRInstantDbChangesDemo.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using SignalRInstantDbChangesDemo.Function;
 
 namespace SignalRInstantDbChangesDemo.DataAccess
 {
@@ -15,7 +15,6 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         static PercentageDataRepository _instance = null;
         NewMessageNotifier _newMessageNotifier;
         Action<string> _dispatcher;
-        private string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIPercentageData] ORDER BY [Line]";
 
         public static PercentageDataRepository GetInstance(Action<string> dispatcher)
@@ -33,7 +32,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         public PercentageDataRepository(Action<string> dispatcher)
         {
             _dispatcher = dispatcher;
-            _newMessageNotifier = new NewMessageNotifier(_connString, _selectQuery);
+            _newMessageNotifier = new NewMessageNotifier(Common.ConnectionString(), _selectQuery);
             _newMessageNotifier.NewMessage += NewMessageRecieved;
         }
 
@@ -48,7 +47,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
 
             try
             {
-                using (var connection = new SqlConnection(_connString))
+                using (var connection = new SqlConnection(Common.ConnectionString()))
                 {
                     using (SqlCommand command = new SqlCommand(_selectQuery, connection))
                     {
@@ -59,32 +58,32 @@ namespace SignalRInstantDbChangesDemo.DataAccess
                         var query = from dt in Reader.Cast<DbDataRecord>()
                                     select new TV_QAIPercentageData
                                     {
-                                        Plant = (dt["Plant"] == DBNull.Value) ? "" : ((string)dt["Plant"]),
+                                        Plant = Common.NullableToString(dt["Plant"]),
                                         Line = (string)dt["Line"],
-                                        H00 = (dt["H00"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H00"]),
-                                        H01 = (dt["H01"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H01"]),
-                                        H02 = (dt["H02"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H02"]),
-                                        H03 = (dt["H03"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H03"]),
-                                        H04 = (dt["H04"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H04"]),
-                                        H05 = (dt["H05"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H05"]),
-                                        H06 = (dt["H06"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H06"]),
-                                        H07 = (dt["H07"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H07"]),
-                                        H08 = (dt["H08"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H08"]),
-                                        H09 = (dt["H09"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H09"]),
-                                        H10 = (dt["H10"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H10"]),
-                                        H11 = (dt["H11"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H11"]),
-                                        H12 = (dt["H12"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H12"]),
-                                        H13 = (dt["H13"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H13"]),
-                                        H14 = (dt["H14"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H14"]),
-                                        H15 = (dt["H15"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H15"]),
-                                        H16 = (dt["H16"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H16"]),
-                                        H17 = (dt["H17"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H17"]),
-                                        H18 = (dt["H18"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H18"]),
-                                        H19 = (dt["H19"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H19"]),
-                                        H20 = (dt["H20"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H20"]),
-                                        H21 = (dt["H21"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H21"]),
-                                        H22 = (dt["H22"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H22"]),
-                                        H23 = (dt["H23"] == DBNull.Value) ? decimal.Zero : ((decimal)dt["H23"])
+                                        H00 = Common.NullableToDecimal(dt["H00"]),
+                                        H01 = Common.NullableToDecimal(dt["H01"]),
+                                        H02 = Common.NullableToDecimal(dt["H02"]),
+                                        H03 = Common.NullableToDecimal(dt["H03"]),
+                                        H04 = Common.NullableToDecimal(dt["H04"]),
+                                        H05 = Common.NullableToDecimal(dt["H05"]),
+                                        H06 = Common.NullableToDecimal(dt["H06"]),
+                                        H07 = Common.NullableToDecimal(dt["H07"]),
+                                        H08 = Common.NullableToDecimal(dt["H08"]),
+                                        H09 = Common.NullableToDecimal(dt["H09"]),
+                                        H10 = Common.NullableToDecimal(dt["H10"]),
+                                        H11 = Common.NullableToDecimal(dt["H11"]),
+                                        H12 = Common.NullableToDecimal(dt["H12"]),
+                                        H13 = Common.NullableToDecimal(dt["H13"]),
+                                        H14 = Common.NullableToDecimal(dt["H14"]),
+                                        H15 = Common.NullableToDecimal(dt["H15"]),
+                                        H16 = Common.NullableToDecimal(dt["H16"]),
+                                        H17 = Common.NullableToDecimal(dt["H17"]),
+                                        H18 = Common.NullableToDecimal(dt["H18"]),
+                                        H19 = Common.NullableToDecimal(dt["H19"]),
+                                        H20 = Common.NullableToDecimal(dt["H20"]),
+                                        H21 = Common.NullableToDecimal(dt["H21"]),
+                                        H22 = Common.NullableToDecimal(dt["H22"]),
+                                        H23 = Common.NullableToDecimal(dt["H23"])
 
                                     };
                         lst = query.ToList();
@@ -93,14 +92,6 @@ namespace SignalRInstantDbChangesDemo.DataAccess
             }
             catch (Exception ex)
             {
-                FloorSystemException fse = null;
-                fse.screenName = "";
-                fse.uiClassName = "QAIMonitoringSystem";
-                fse.uiControlName = "PercentageDataRepository";
-                fse.WorkStationId = "";
-                fse.baseexception = ex.Message;
-
-                fse.LogExceptionToDB(null);
             }
           
 

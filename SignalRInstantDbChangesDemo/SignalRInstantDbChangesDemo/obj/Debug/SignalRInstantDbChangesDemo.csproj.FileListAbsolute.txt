@@ -456,6 +456,3 @@ C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\
 C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\System.Web.WebPages.xml
 C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\System.Web.WebPages.Deployment.xml
 C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\System.Web.WebPages.Razor.xml
-C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Hartalega.FS.Framework.dll
-C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Hartalega.FS.Framework.pdb
-C:\Source\SignalRSample\SignalRInstantDbChangesDemo\SignalRInstantDbChangesDemo\bin\Hartalega.FS.Framework.xml
