@@ -1,21 +1,21 @@
-﻿using SignalRInstantDbChangesDemo.Models;
+﻿using PQIChart.Function;
+using PQIChart.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using SignalRInstantDbChangesDemo.Function;
+using System.Threading.Tasks;
 
-namespace SignalRInstantDbChangesDemo.DataAccess
+namespace PQIChart.DataAccess
 {
     public class PercentageDataRepository
     {
         static PercentageDataRepository _instance = null;
         NewMessageNotifier _newMessageNotifier;
         Action<string> _dispatcher;
-        private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIPercentageData] ORDER BY [Line]";
+        private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIPercentageData](nolock) ORDER BY [Line]";
 
         public static PercentageDataRepository GetInstance(Action<string> dispatcher)
         {
@@ -41,7 +41,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
             _dispatcher(e.Info.ToString());
         }
 
-        public List<TV_QAIPercentageData> GetDataResultRecords()
+        public async Task<List<TV_QAIPercentageData>> GetDataResultRecords()
         {
             var lst = new List<TV_QAIPercentageData>();
 
@@ -53,7 +53,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
                     {
                         if (connection.State == ConnectionState.Closed)
                             connection.Open();
-                        var Reader = command.ExecuteReader();
+                        var Reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
 
                         var query = from dt in Reader.Cast<DbDataRecord>()
                                     select new TV_QAIPercentageData
@@ -92,6 +92,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.Message);
             }
           
 

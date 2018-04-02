@@ -1,22 +1,19 @@
-﻿<div class="row">
-    <div class="col-md-12 col-xs-12">
-        <div id="divLine"></div>
-        <div class="footer">
-            <div>Hartalega NGC Sdn Bhd</div>
-            <div class="middle">Batch Job Last Run: <span class="curr-run"></span></div>
-            <div class="middle">Next Batch Run Time: <span class="next-run"></span></div>
-            <div class="right"><span class="current-time"></span></div>
-        </div>
-    </div>
+﻿
+<div class="row">
+    <div id="divLine" class="col"></div>
 </div>
-   
+<div class="footer display-none row">
+    <div class="col">Hartalega NGC Sdn Bhd</div>
+    <div class="col">Batch Job Last Run: <span class="curr-run"></span></div>
+    <div class="col">Next Batch Run Time: <span class="next-run"></span></div>
+    <div class="col text-right"><span class="current-time"></span></div>
+</div>    
+
 <div id="Popover-Info" class="display-none">
     @Html.Partial("~/Views/Shared/_LineInfo.cshtml")
     @Html.Partial("~/Views/Shared/_DefectDetails.cshtml")
 </div>
 
 @section Scripts{
-    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.2.js")"></script>
     <script src="@Url.Content("~/signalr/hubs")"></script>
-    <script src="@Url.Content("~/Scripts/main.js")"></script>
 }

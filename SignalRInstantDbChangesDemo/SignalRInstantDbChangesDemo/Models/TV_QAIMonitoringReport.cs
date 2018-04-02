@@ -1,5 +1,5 @@
 ﻿
-namespace SignalRInstantDbChangesDemo.Models
+namespace PQIChart.Models
 {
     public class TV_QAIMonitoringReport
     {

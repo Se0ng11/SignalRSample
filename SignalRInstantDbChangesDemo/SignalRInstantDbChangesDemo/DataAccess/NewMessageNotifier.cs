@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace SignalRInstantDbChangesDemo.DataAccess
+namespace PQIChart.DataAccess
 {
     public delegate void ResultChangedEventHandler(object sender, SqlNotificationEventArgs e);
     public class NewMessageNotifier
@@ -32,6 +32,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
                     var Reader = command.ExecuteReader();
+
                 }
             }
         }
@@ -39,6 +40,7 @@ namespace SignalRInstantDbChangesDemo.DataAccess
         {
             if (NewMessage != null)
                 NewMessage(sender, e);
+
             RegisterForNotifications();
         }
     }

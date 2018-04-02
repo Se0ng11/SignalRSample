@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace SignalRInstantDbChangesDemo
+namespace PQIChart
 {
     public static class WebApiConfig
     {

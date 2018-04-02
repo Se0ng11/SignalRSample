@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 
-namespace SignalRInstantDbChangesDemo.Function
+namespace PQIChart.Function
 {
     public class Common
     {

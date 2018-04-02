@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.SignalR;
-using SignalRInstantDbChangesDemo.DataAccess;
+using PQIChart.DataAccess;
 using System;
 
-namespace SignalRInstantDbChangesDemo.Hubs
+namespace PQIChart.Hubs
 {
     public class MonitoringReportHub : Hub
     {

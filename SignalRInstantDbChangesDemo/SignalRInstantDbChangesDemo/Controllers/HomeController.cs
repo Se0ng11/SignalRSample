@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SignalRInstantDbChangesDemo.Models;
+using PQIChart.Collection;
+using PQIChart.Interface;
+using PQIChart.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SignalRInstantDbChangesDemo.Controllers
+namespace PQIChart.Controllers
 {
     public class HomeController : Controller
     {
@@ -21,10 +23,10 @@ namespace SignalRInstantDbChangesDemo.Controllers
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetMonitoringReportDetails();
             var data2 = dataResultService.GetPercentageDataDetails();
-            var data3 = dataResultService.GetProductionLineDetails();
-            var data4 = dataResultService.GetDefectDetails();
 
-            var result = new { mr = data1, pd = data2, pl= data3, dd = data4, serverDate = DateTime.Now };
+            Task.WaitAll(data1, data2);
+
+            var result = new { mr = data1.Result, pd = data2.Result, serverDate = DateTime.Now };
 
             return ReturnJSON(result);
         }
@@ -34,7 +36,8 @@ namespace SignalRInstantDbChangesDemo.Controllers
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetMonitoringReportDetails();
 
-            var result = new { mr = data1 };
+            Task.WaitAll(data1);
+            var result = new { mr = data1.Result };
 
             return ReturnJSON(result);
         }
@@ -43,9 +46,10 @@ namespace SignalRInstantDbChangesDemo.Controllers
         {
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetPercentageDataDetails();
-            var data2 = dataResultService.GetDefectDetails();
 
-            var result = new { pd = data1, dd = data2 };
+            Task.WaitAll(data1);
+
+            var result = new { pd = data1.Result };
 
             return ReturnJSON(result);
         }
@@ -55,15 +59,28 @@ namespace SignalRInstantDbChangesDemo.Controllers
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetProductionLineDetails();
 
-            var result = new { pl = data1 };
+            Task.WaitAll(data1);
+
+            var result = new { pl = data1.Result };
+           
+            return ReturnJSON(result);
+        }
+
+        public JsonResult GetDefectDetails()
+        {
+            IQaiService dataResultService = new QaiService();
+            var data1 = dataResultService.GetDefectDetails();
+
+            Task.WaitAll(data1);
+
+            var result = new { dd = data1.Result };
 
             return ReturnJSON(result);
         }
 
         private JsonResult ReturnJSON(object result)
         {
-            //return Content(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(result, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), JsonRequestBehavior.AllowGet);
         }
     }
 }

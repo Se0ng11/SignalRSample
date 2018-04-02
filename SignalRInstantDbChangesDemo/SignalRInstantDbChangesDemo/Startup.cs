@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(SignalRInstantDbChangesDemo.Startup))]
-namespace SignalRInstantDbChangesDemo
+[assembly: OwinStartupAttribute(typeof(PQIChart.Startup))]
+namespace PQIChart
 {
     public partial class Startup
     {

@@ -2,19 +2,24 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PQI chart</title>
     @Styles.Render("~/Content/css")
 
 </head>
 <body>
-    <div class="container-fluid body-content">
+    <div id="loader">
+        <div id="loader-body">
+            <i class="fas fa-cog fa-5x fa-spin" aria-hidden="true"></i> 
+            <span id="loader-info"> Initialize chart...</span>
+        </div>
+    </div>
+    <div class="container-fluid body-content display-none">
         @RenderBody()       
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/moment")
     @RenderSection("scripts", required: false)
 </body>
 </html>
