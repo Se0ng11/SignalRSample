@@ -73,7 +73,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/05/2018 09:20:26</publishTime>
     </File>
     <File Include="bin/SignalRInstantDbChangesDemo.dll">
-      <publishTime>03/30/2018 18:02:11</publishTime>
+      <publishTime>04/02/2018 14:59:15</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>03/05/2018 09:20:18</publishTime>
@@ -286,85 +286,85 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/20/2018 17:00:01</publishTime>
     </File>
     <File Include="Content/DataTables/css/dataTables.semanticui.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/dataTables.semanticui.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/dataTables.uikit.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/dataTables.uikit.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.bootstrap.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.bootstrap.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.bootstrap4.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.bootstrap4.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.dataTables.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.dataTables.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.foundation.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.foundation.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.jqueryui.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.jqueryui.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.semanticui.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedColumns.semanticui.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.bootstrap.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.bootstrap.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.bootstrap4.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.bootstrap4.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.dataTables.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.dataTables.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.foundation.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.foundation.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.jqueryui.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.jqueryui.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.semanticui.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/20/2018 17:00:00</publishTime>
     </File>
     <File Include="Content/DataTables/css/fixedHeader.semanticui.min.css">
       <publishTime>03/20/2018 16:59:59</publishTime>
@@ -658,7 +658,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/13/2018 10:24:08</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>03/30/2018 10:55:21</publishTime>
+      <publishTime>04/02/2018 12:50:19</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>03/05/2018 09:20:14</publishTime>
@@ -685,13 +685,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/29/2018 15:31:02</publishTime>
     </File>
     <File Include="Scripts/app/main.js">
-      <publishTime>03/30/2018 12:54:09</publishTime>
+      <publishTime>03/30/2018 18:10:01</publishTime>
     </File>
     <File Include="Scripts/app/pqi.colorblink.js">
       <publishTime>03/28/2018 16:08:40</publishTime>
     </File>
     <File Include="Scripts/app/pqi.popover.js">
-      <publishTime>03/30/2018 10:14:12</publishTime>
+      <publishTime>04/02/2018 14:57:49</publishTime>
     </File>
     <File Include="Scripts/app/pqi.table.js">
       <publishTime>03/30/2018 10:41:49</publishTime>
@@ -715,13 +715,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/29/2018 15:31:01</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/29/2018 15:31:00</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js.map">
       <publishTime>03/29/2018 15:31:00</publishTime>
     </File>
     <File Include="Scripts/bootstrap.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/29/2018 15:31:00</publishTime>
     </File>
     <File Include="Scripts/bootstrap.min.js.map">
       <publishTime>03/29/2018 15:30:49</publishTime>
@@ -1171,7 +1171,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/23/2018 09:46:33</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/30/2018 10:41:00</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>02/23/2018 09:46:58</publishTime>
@@ -1198,7 +1198,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/23/2018 09:46:58</publishTime>
     </File>
     <File Include="Views/Shared/_DefectDetails.cshtml">
-      <publishTime>03/30/2018 10:24:17</publishTime>
+      <publishTime>04/02/2018 12:50:39</publishTime>
     </File>
     <File Include="Views/Shared/_Details.cshtml">
       <publishTime>03/16/2018 17:52:11</publishTime>
@@ -1222,7 +1222,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/05/2018 09:20:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/30/2018 18:02:17</publishTime>
+      <publishTime>04/02/2018 10:19:03</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>03/29/2018 09:59:53</publishTime>

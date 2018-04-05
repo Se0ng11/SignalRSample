@@ -13,7 +13,9 @@ namespace PQIChart
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                      "~/Scripts/jquery-{version}",
-                      "~/Scripts/bootstrap.js",
+                      //"~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.bundle.js",
+                      //"~/Scripts/popper.js",
                       "~/Scripts/respond.js",
                       "~/Scripts/moment.js",
                       "~/Scripts/jquery.webui-popover.js",
@@ -28,8 +30,8 @@ namespace PQIChart
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/jquery.webui-popover.css",
-                      "~/Content/DataTables/css/dataTables.bootstrap.css",
+                      //"~/Content/jquery.webui-popover.css",
+                      "~/Content/DataTables/css/dataTables.bootstrap4.css",
                       "~/Content/fa-regular.css",
                       "~/Content/fa-solid.css",
                       "~/Content/fontawesome-all.css",

@@ -10,13 +10,10 @@
     width:100%;
     height:100%;
     opacity:0.6;
-    
 }
-
 
 #loader-body #loader-info{
     font-size:3em;
-
 }
 
 #main-table thead tr th,
@@ -154,6 +151,11 @@ table tbody tr th,
 
 #tblDefectDetails_wrapper .row {
     margin-right: 0;
+}
+
+
+.popover{
+    min-width: 900px;
 }
 
 @media only screen and (min-width : 320px) {

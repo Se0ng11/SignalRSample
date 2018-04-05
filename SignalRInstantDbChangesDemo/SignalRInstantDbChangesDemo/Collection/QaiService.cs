@@ -33,5 +33,6 @@ namespace PQIChart.Collection
 
             return obj.GetDataResultRecords();
         }
+
     }
 }

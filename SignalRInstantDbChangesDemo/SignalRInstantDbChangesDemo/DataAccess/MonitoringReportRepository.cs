@@ -17,7 +17,7 @@ namespace PQIChart.DataAccess
         static MonitoringReportRepository _instance = null;
         NewMessageNotifier _newMessageNotifier;
         Action<string> _dispatcher;
-        private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIMonitoringReport](nolock) ORDER BY [Line]";
+        private string _selectQuery = @"SELECT [Line],[H00],[H01],[H02],[H03],[H04],[H05],[H06],[H07],[H08],[H09],[H10],[H11],[H12],[H13],[H14],[H15],[H16],[H17],[H18],[H19],[H20],[H21],[H22],[H23],[Plant] FROM [dbo].[TV_QAIMonitoringReport] ORDER BY [Line]";
 
         public static MonitoringReportRepository GetInstance(Action<string> dispatcher)
         {

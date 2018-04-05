@@ -54,6 +54,12 @@
 						$element.css({ left: 0 });
 						$('.webui-arrow').css({ left: newP });
 					}
+
+					var $width = $element.width();
+					var $table = $element.find('#tblDefectDetails');
+					if ($width < 500){
+					    $element.css({ "min-width": $element.find('#tblDefectDetails').width() + 300 });
+					}
 				},
 				onHide: function ($element) {
 					$('.in').remove();

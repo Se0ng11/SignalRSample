@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace PQIChart.DataAccess
 {
@@ -17,10 +18,10 @@ namespace PQIChart.DataAccess
         {
             _connString = connString;
             _selectQuery = selectQuery;
-            RegisterForNotifications();
+            Task.WaitAll(RegisterForNotifications());
         }
 
-        private void RegisterForNotifications()
+        private async Task RegisterForNotifications()
         {
             using (var connection = new SqlConnection(_connString))
             {
@@ -31,7 +32,7 @@ namespace PQIChart.DataAccess
                     dependency.OnChange += new OnChangeEventHandler(Dependency_OnChange);
                     if (connection.State == ConnectionState.Closed)
                         connection.Open();
-                    var Reader = command.ExecuteReader();
+                    var Reader = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                 }
             }
@@ -41,7 +42,7 @@ namespace PQIChart.DataAccess
             if (NewMessage != null)
                 NewMessage(sender, e);
 
-            RegisterForNotifications();
+            Task.WaitAll(RegisterForNotifications());
         }
     }
 }
