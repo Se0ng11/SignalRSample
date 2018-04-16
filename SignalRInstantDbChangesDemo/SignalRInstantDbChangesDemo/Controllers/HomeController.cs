@@ -23,10 +23,12 @@ namespace PQIChart.Controllers
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetMonitoringReportDetails();
             var data2 = dataResultService.GetPercentageDataDetails();
+            var data3 = dataResultService.GetLastBatchJobRun();
+            var data4 = dataResultService.GetNextBatchJobRun();
 
-            Task.WaitAll(data1, data2);
+            Task.WaitAll(data1, data2, data3, data4);
 
-            var result = new { mr = data1.Result, pd = data2.Result, serverDate = DateTime.Now };
+            var result = new { mr = data1.Result, pd = data2.Result, serverDate = DateTime.Now, lastRun = data3.Result, nextRun = data4.Result };
 
             return ReturnJSON(result);
         }
@@ -46,10 +48,12 @@ namespace PQIChart.Controllers
         {
             IQaiService dataResultService = new QaiService();
             var data1 = dataResultService.GetPercentageDataDetails();
+            var data2 = dataResultService.GetLastBatchJobRun();
+            var data3 = dataResultService.GetNextBatchJobRun();
 
-            Task.WaitAll(data1);
+            Task.WaitAll(data1, data2, data3);
 
-            var result = new { pd = data1.Result };
+            var result = new { pd = data1.Result, lastRun = data2.Result, nextRun = data3.Result };
 
             return ReturnJSON(result);
         }

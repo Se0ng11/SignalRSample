@@ -20,11 +20,15 @@ function InitialSignalR() {
         $.connection.hub.start().done(function () {
             if (attempt > 1) {
                 NotifyMessage(successMessage, "success");
+                GetDetailsInformation(true);
+                isBlink = true;
+            } else {
+                GetDetailsInformation(false);
+                isBlink = false;
             }
             attempt = 1;
-            GetDetailsInformation(false);
             GetProductionLine();
-            isBlink = false;
+
         }).fail(function (error) {
             NotifyMessage(attempt + retryMessage, "danger");
             attempt += 1;
@@ -72,8 +76,7 @@ function GetDetailsInformation(flag) {
         success: function (result) {
             var pResult = JSON.parse(result);
             LiveDateTime(pResult.serverDate);
-            CalculateBatch();
-            //tempProdLine = pResult.pl;
+            CalculateBatch(pResult.lastRun, pResult.nextRun);
             if (pResult.length === 0) {
             }
             else {
@@ -159,14 +162,13 @@ function LiveDateTime(serverDate) {
     }, 1000);
 }
 
-function CalculateBatch(){
+function CalculateBatch(lastRun, nextRun){
     var $doc = $(document);
     var $currRun = $doc.find('.footer .curr-run');
     var $nextRun = $doc.find('.footer .next-run');
-    var $now = moment();
 
-    $currRun.text($now.format(dateFormat));
-    $nextRun.text($now.add('4', 'minutes').format(dateFormat));
+    $currRun.text(moment(lastRun).format(dateFormat));
+    $nextRun.text(moment(nextRun).format(dateFormat));
 }
 
 function MassageData(data, methodType) {

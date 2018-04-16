@@ -201,6 +201,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DataAccess\DefectDetailsRepository.cs" />
+    <Compile Include="DataAccess\LastBatchJobRunRepository.cs" />
+    <Compile Include="DataAccess\NextBatchJobRunRepository.cs" />
     <Compile Include="DataAccess\PercentageDataRepository.cs" />
     <Compile Include="DataAccess\MonitoringReportRepository.cs" />
     <Compile Include="DataAccess\NewMessageNotifier.cs" />
@@ -600,6 +602,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Users\teoh.ws\Source\Floor System\Release\Hartalega.FloorSystem.Framework\Hartalega.FloorSystem.Framework.csproj">
+      <Project>{c58265af-4f65-404a-acdc-cdf77b7c937a}</Project>
+      <Name>Hartalega.FloorSystem.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

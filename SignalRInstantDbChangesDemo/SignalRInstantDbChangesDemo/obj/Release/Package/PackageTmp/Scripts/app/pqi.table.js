@@ -78,7 +78,7 @@
 		table = "<table id=\"main-table\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>";
 
 		$('#loader').fadeIn(3000).hide();
-		$(div).append(table);
+		$(div).html(table);
 		$('.body-content').fadeIn(3000).show();
 		$('.footer').removeClass("display-none");
 		IntervalColor($div);

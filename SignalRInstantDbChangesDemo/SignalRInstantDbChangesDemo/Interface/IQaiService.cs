@@ -15,5 +15,8 @@ namespace PQIChart.Interface
 
         Task<List<DefectDetails>> GetDefectDetails();
 
+        Task<DateTime?> GetLastBatchJobRun();
+
+        Task<DateTime?> GetNextBatchJobRun();
     }
 }

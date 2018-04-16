@@ -12,7 +12,6 @@ namespace PQIChart
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                     "~/Scripts/jquery-{version}",
                       //"~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap.bundle.js",
                       //"~/Scripts/popper.js",
@@ -21,7 +20,9 @@ namespace PQIChart
                       "~/Scripts/jquery.webui-popover.js",
                       "~/Scripts/bootstrap-notify.js",
                       "~/Scripts/DataTables/jquery.dataTables.js",
-                      "~/Scripts/DataTables/dataTables.bootstrap4.js",
+                      "~/Scripts/DataTables/dataTables.responsive.js",
+                      //"~/Scripts/DataTables/dataTables.bootstrap4.js",
+                       "~/Scripts/DataTables/responsive.bootstrap4.js",
                       "~/Scripts/jquery.signalR-{version}.js",
                       "~/Scripts/app/pqi.table.js",
                       "~/Scripts/app/pqi.popover.js",

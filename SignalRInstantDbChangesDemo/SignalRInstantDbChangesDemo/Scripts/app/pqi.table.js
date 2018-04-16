@@ -2,9 +2,19 @@
 	$.fn.pqiTable = function (options) {
 		var settings = $.extend({
 			monitoringReport: [],
-			percentageData: []
+			percentageData: [],
+            isBlink: false
 		}, options);
-		GenerateTimeAndLine(this, settings.monitoringReport, settings.percentageData);
+
+		if (!settings.isBlink)
+		{
+            GenerateTimeAndLine(this, settings.monitoringReport, settings.percentageData);
+		}
+		else
+		{
+		    MassageData(settings.monitoringReport, 1);
+		    MassageData(settings.percentageData, 2);
+        }
 	}
 
 	function GenerateTimeAndLine(div, monitoringReport, percentageData) {
@@ -78,7 +88,7 @@
 		table = "<table id=\"main-table\"><thead><tr><th></th><th></th>" + th + "</tr></thead><tbody>" + row + "</tbody></table>";
 
 		$('#loader').fadeIn(3000).hide();
-		$(div).append(table);
+		$(div).html(table);
 		$('.body-content').fadeIn(3000).show();
 		$('.footer').removeClass("display-none");
 		IntervalColor($div);
@@ -100,6 +110,75 @@
 		setInterval(function () {
 		    SetIntervalColor($div);
 		}, 5000);
+	}
+
+	function MassageData(data, methodType) {
+	    var x = data;
+	    var nArray = [];
+
+	    if (data.length === 0 || $('#main-table tbody tr').length === 0) {
+	        location.reload();
+	    }
+
+	    for (var i = 0; i <= data.length - 1; i++) {
+	        var key = Object.keys(data[i]);
+	        var combine = data[i].Plant + data[i].Line;
+
+	        for (var j = 0; j <= key.length - 1; j++) {
+	            var id = "";
+	            var status = "";
+	            var message = "";
+	            if (key[j].substring(0, 1) === "H") {
+	                id = combine + key[j].slice(1);
+	                status = ConvertNumberToColor(data[i][key[j]]);
+	                message = HideNumber(data[i][key[j]]);
+	                nArray.push({ id: id, status: status, message: message });
+	            }
+	        }
+	    }
+
+	    $('#main-table').colorblink({
+	        array: nArray,
+	        methodType: methodType
+	    });
+	}
+
+	function ConvertNumberToColor(value) {
+	    value = value.toString();
+	    var color = "";
+	    if (value === "1") {
+	        color = "green";
+	    } else if (value === "0") {
+	        color = "dormant";
+	    } else if (value === "2") {
+	        color = "hotpink";
+	    } else if (value === "3") {
+	        color = "yellow";
+	    } else if (value === "4") {
+	        color = "blueviolet";
+	    } else if (value === "5") {
+	        color = "darkorange";
+	    } else if (value === "6") {
+	        color = "lightblue";
+	    } else if (value === "7") {
+	        color = "red";
+	    } else {
+	        color = "black";
+	    }
+
+	    return color;
+	}
+
+	function HideNumber(value) {
+	    var number = "";
+	    var ary = ["0", "1", "2", "3", "4", "5", "6", "7"];
+
+	    if (ary.indexOf(value) > -1) {
+	        number = "";
+	    } else {
+	        number = value;
+	    }
+	    return number;
 	}
 
 }(jQuery));

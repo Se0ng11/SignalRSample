@@ -1,6 +1,7 @@
 ﻿using PQIChart.DataAccess;
 using PQIChart.Interface;
 using PQIChart.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,5 +35,18 @@ namespace PQIChart.Collection
             return obj.GetDataResultRecords();
         }
 
+        public Task<DateTime?> GetLastBatchJobRun()
+        {
+            LastBatchJobRunRepository obj = new LastBatchJobRunRepository();
+
+            return obj.GetDataResultRecords();
+        }
+
+        public Task<DateTime?> GetNextBatchJobRun()
+        {
+            NextBatchJobRunRepository obj = new NextBatchJobRunRepository();
+
+            return obj.GetDataResultRecords();
+        }
     }
 }

@@ -20,11 +20,15 @@ function InitialSignalR() {
         $.connection.hub.start().done(function () {
             if (attempt > 1) {
                 NotifyMessage(successMessage, "success");
+                GetDetailsInformation(true);
+                isBlink = true;
+            } else {
+                GetDetailsInformation(false);
+                isBlink = false;
             }
             attempt = 1;
-            GetDetailsInformation(false);
             GetProductionLine();
-            isBlink = false;
+
         }).fail(function (error) {
             NotifyMessage(attempt + retryMessage, "danger");
             attempt += 1;
@@ -53,7 +57,7 @@ function InitialSignalR() {
     StartHub();
 
     $.connection.hub.reconnecting(function () {
-        NotifyMessage("Connection interrupted, reconnecting...", "danger");
+        NotifyMessage("Slow network detected, attempt to reconnect...", "danger");
     });
 
     $.connection.hub.disconnected(function () {
@@ -72,21 +76,15 @@ function GetDetailsInformation(flag) {
         success: function (result) {
             var pResult = JSON.parse(result);
             LiveDateTime(pResult.serverDate);
-            CalculateBatch();
-            //tempProdLine = pResult.pl;
+            CalculateBatch(pResult.lastRun, pResult.nextRun);
             if (pResult.length === 0) {
             }
             else {
-                if (flag) {
-                    MassageData(pResult.mr, 1);
-                    MassageData(pResult.pd, 2);
-                }
-                else {
-                    $('#divLine').pqiTable({
-                        monitoringReport: pResult.mr,
-                        percentageData: pResult.pd
-                    });
-                }
+                $('#divLine').pqiTable({
+                    monitoringReport: pResult.mr,
+                    percentageData: pResult.pd,
+                    isBlink: flag
+                });
                 GetDefectDetails();
             }
         },
@@ -159,83 +157,13 @@ function LiveDateTime(serverDate) {
     }, 1000);
 }
 
-function CalculateBatch(){
+function CalculateBatch(lastRun, nextRun){
     var $doc = $(document);
     var $currRun = $doc.find('.footer .curr-run');
     var $nextRun = $doc.find('.footer .next-run');
-    var $now = moment();
 
-    $currRun.text($now.format(dateFormat));
-    $nextRun.text($now.add('4', 'minutes').format(dateFormat));
-}
-
-function MassageData(data, methodType) {
-    var x = data;
-    var nArray = [];
-
-    if (data.length === 0 || $('#main-table tbody tr').length === 0) {
-        location.reload();
-    }
-
-    for (var i = 0; i <= data.length - 1; i++) {
-        var key = Object.keys(data[i]);
-        var combine = data[i].Plant + data[i].Line;
-
-        for (var j = 0; j <= key.length - 1; j++) {
-            var id = "";
-            var status = "";
-            var message = "";
-            if (key[j].substring(0, 1) === "H") {
-                id = combine + key[j].slice(1);
-                status = ConvertNumberToColor(data[i][key[j]]);
-                message = HideNumber(data[i][key[j]]);
-                nArray.push({ id: id, status: status, message: message });
-            }
-        }
-    }
-
-    $('#main-table').colorblink({
-        array: nArray,
-        methodType: methodType
-    });
-}
-
-function ConvertNumberToColor(value) {
-    value = value.toString();
-    var color = "";
-    if (value === "1") {
-        color = "green";
-    } else if (value === "0") {
-        color = "dormant";
-    } else if (value === "2") {
-        color = "hotpink";
-    } else if (value === "3") {
-        color = "yellow";
-    } else if (value === "4") {
-        color = "blueviolet";
-    } else if (value === "5") {
-        color = "darkorange";
-    } else if (value === "6") {
-        color = "lightblue";
-    } else if (value === "7") {
-        color = "red";
-    } else  {
-        color = "black";
-    }
-
-    return color;
-}
-
-function HideNumber(value) {
-    var number = "";
-    var ary = ["0", "1", "2", "3", "4", "5", "6", "7"];
-
-    if (ary.indexOf(value)> -1) {
-        number = "";
-    } else {
-        number = value;
-    }
-    return number;
+    $currRun.text(moment(lastRun).format(dateFormat));
+    $nextRun.text(moment(nextRun).format(dateFormat));
 }
 
 function NotifyMessage(msg, msgType) {

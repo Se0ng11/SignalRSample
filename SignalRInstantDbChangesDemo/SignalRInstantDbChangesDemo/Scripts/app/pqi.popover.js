@@ -1,4 +1,5 @@
 ﻿(function ($) {
+    var popOverInterval = "";
     $.fn.pqiPopOver = function (options) {
         switch (options) {
             case "destroy":
@@ -6,9 +7,9 @@
                 break;
             default:
                 InitialOnClickPopOut(this);
-                OnHide(this);
-
         }
+
+        OnHide(this);
 
         //$('body').on('click', '#tblDefectDetails thead tr th', function (e) {
         //    e.preventDefault();
@@ -59,7 +60,9 @@
                 html: true,
 		        container: ".body-content",
 		        placement: 'right',
-		        title: 'Details',
+		        title: function () {
+		            return "Details " + '<span class="close" style="margin-top: -5px">&times;</span>';
+		        },
 				content: function () {
 					return GenerateContent(this, 'line');
 				},
@@ -69,8 +72,16 @@
 				//onHide: function ($element) {
 				//    $('.in').remove();
 				//}
-			});
-		}
+        }).on('shown.bs.popover', function (e) {
+            var $closeButton = $(document).find('.close');
+
+            $closeButton.click(function () {
+                $('.popover').remove();
+                $('[aria-describedby]').popover('hide');
+            });
+
+        });
+	}
 
 	InitialDetailsPO = function(element) {
 		var $element = element;
@@ -80,7 +91,9 @@
             html: true,
 			container: ".body-content",
 			placement: 'auto',
-			title: "Details",
+			title: function(){
+			    return "Details " +'<span class="close" style="margin-top: -5px">&times;</span>';
+			},
 			content: function () {
 				return GenerateContent(this, 'detail');
 			},
@@ -96,6 +109,14 @@
 			//	$('.in').remove();
 			//}
 				
+		}).on('shown.bs.popover', function (e) {
+		    var $closeButton = $(document).find('.close');
+
+		    $closeButton.click(function () {
+		        $('.popover').remove();
+		        $('[aria-describedby]').popover('hide');
+		    });
+
 		});
 	}
 
@@ -128,8 +149,6 @@
 			}
 			else
 			{
-			    var popOverInterval = "";
-
 			    clearInterval(popOverInterval);
 
 			    popOverInterval = setInterval(function () {
@@ -202,7 +221,8 @@
 	            "info": false,
 	            "pageLength": 100,
 	            paging: false,
-	            sort: false
+	            sort: false,
+	            responsive: true
 	        });
 
 	        table.columns([0, 4, 5]).visible(false, false);
@@ -227,6 +247,7 @@
 	    })
 
 	    $('#main-table').on('click', 'td', function (e) {
+       
 	        var $e = $(e.target);
 	        var $popOver = $('.popover');
 	        var $desc = $('[aria-describedby]');

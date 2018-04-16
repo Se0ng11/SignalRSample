@@ -19,7 +19,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/28/2018 16:33:59</publishTime>
     </File>
     <File Include="bin/Hartalega.FS.Framework.dll">
-      <publishTime>03/13/2018 17:58:03</publishTime>
+      <publishTime>04/05/2018 14:44:49</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
       <publishTime>03/05/2018 09:20:17</publishTime>
@@ -73,7 +73,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/05/2018 09:20:26</publishTime>
     </File>
     <File Include="bin/SignalRInstantDbChangesDemo.dll">
-      <publishTime>04/02/2018 14:59:15</publishTime>
+      <publishTime>04/06/2018 14:28:06</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>03/05/2018 09:20:18</publishTime>
@@ -658,7 +658,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/13/2018 10:24:08</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>04/02/2018 12:50:19</publishTime>
+      <publishTime>04/06/2018 12:59:48</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>03/05/2018 09:20:14</publishTime>
@@ -685,16 +685,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/29/2018 15:31:02</publishTime>
     </File>
     <File Include="Scripts/app/main.js">
-      <publishTime>03/30/2018 18:10:01</publishTime>
+      <publishTime>04/06/2018 16:58:35</publishTime>
     </File>
     <File Include="Scripts/app/pqi.colorblink.js">
-      <publishTime>03/28/2018 16:08:40</publishTime>
+      <publishTime>04/03/2018 10:41:24</publishTime>
     </File>
     <File Include="Scripts/app/pqi.popover.js">
-      <publishTime>04/02/2018 14:57:49</publishTime>
+      <publishTime>04/06/2018 14:59:01</publishTime>
     </File>
     <File Include="Scripts/app/pqi.table.js">
-      <publishTime>03/30/2018 10:41:49</publishTime>
+      <publishTime>04/06/2018 14:59:51</publishTime>
     </File>
     <File Include="Scripts/bootstrap-notify.js">
       <publishTime>03/14/2018 10:54:28</publishTime>
@@ -1198,13 +1198,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/23/2018 09:46:58</publishTime>
     </File>
     <File Include="Views/Shared/_DefectDetails.cshtml">
-      <publishTime>04/02/2018 12:50:39</publishTime>
+      <publishTime>04/05/2018 12:46:09</publishTime>
     </File>
     <File Include="Views/Shared/_Details.cshtml">
       <publishTime>03/16/2018 17:52:11</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>03/30/2018 09:54:39</publishTime>
+      <publishTime>04/02/2018 16:59:50</publishTime>
     </File>
     <File Include="Views/Shared/_LineInfo.cshtml">
       <publishTime>03/30/2018 10:44:53</publishTime>
@@ -1222,7 +1222,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/05/2018 09:20:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/02/2018 10:19:03</publishTime>
+      <publishTime>04/06/2018 14:28:24</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>03/29/2018 09:59:53</publishTime>

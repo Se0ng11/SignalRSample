@@ -25,7 +25,7 @@ namespace PQIChart.DataAccess
                     using (SqlCommand command = new SqlCommand(_selectQuery, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandTimeout = 40;
+                        command.CommandTimeout = Common.SPTimeOut();
                         if (connection.State == ConnectionState.Closed)
                             connection.Open();
                         var Reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
